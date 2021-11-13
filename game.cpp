@@ -1,4 +1,5 @@
 #include "game.h"
+#include "environment.h"
 
 game::game(Uint16 width, Uint16 height) {
 	game::active = true;
@@ -74,6 +75,7 @@ void game::handleInput(SDL_Event &event, bool keyDown) {
 void game::render() {
 	SDL_SetRenderDrawColor(game::renderer, 71, 71, 71, 255);
 	SDL_RenderClear(game::renderer);
+	game::back->renderEnvironment(game::renderer);
 	game::player.render(game::renderer);
 	SDL_RenderPresent(game::renderer);
 }

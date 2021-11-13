@@ -4,6 +4,7 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "environment.h"
 
 #include "character.h"
 
@@ -24,6 +25,7 @@ private:
 	Uint16 window_height;
 	Uint64 now;
 	Uint64 last;
+	environment* back;
 	character player;
 };
 
