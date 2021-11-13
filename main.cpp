@@ -1,7 +1,7 @@
 #include "game.h"
 #undef main
 int main() {
-	game Game = game();
+	game Game = game(1280, 720);
 	
 
 	while (Game.active) {
