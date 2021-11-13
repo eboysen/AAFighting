@@ -1,4 +1,5 @@
 #include "game.h"
+#include "environment.h"
 
 game::game() {
 	game::active = true;
@@ -22,6 +23,9 @@ void game::update() {
 }
 
 void game::render() {
-
+	SDL_SetRenderDrawColor(game::renderer,255, 255, 255, 255);
+	SDL_RenderClear(game::renderer);
+	game::back->renderEnvironment(game::renderer);
+	SDL_RenderPresent(game::renderer);
 }
 

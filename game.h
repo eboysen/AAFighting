@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "SDL_image.h"
+#include "environment.h"
 
 class game
 {
@@ -11,12 +12,12 @@ public:
 
 	game();
 	~game();
-	void run();
 	void update();
 	void render();
 
 private:
 	SDL_Window * window;
 	SDL_Renderer * renderer;
+	environment* back;
 };
 
