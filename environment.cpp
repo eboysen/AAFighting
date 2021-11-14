@@ -50,7 +50,7 @@ environment::~environment() {
 void environment::renderEnvironment(SDL_Renderer* render, int width, int height) {
 	HEIGHT = height;
 	WIDTH = width;
-	SDL_Texture* leftCloud = TextureManager::loadTexture("./assets/leftClou.png", render);
+	SDL_Texture* leftCloud = TextureManager::loadTexture("./assets/leftCloud.png", render);
 	SDL_Texture* middleCloud = TextureManager::loadTexture("./assets/middleCloud.png", render);
 	SDL_Texture* rightCloud = TextureManager::loadTexture("./assets/rightCloud.png", render);
 
