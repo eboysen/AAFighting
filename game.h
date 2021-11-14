@@ -15,10 +15,15 @@ class game
 {
 public:
 	bool active;
+	bool menuActive=true;
+	bool startMenu=true;
+	bool characterSelect = true;
 	game(Uint16 width, Uint16 height);
 	~game();
 	void update();
 	void render();
+	void menuUpdate();
+	void menuRender();
 
 private:
 	SDL_Window * window;
@@ -31,6 +36,25 @@ private:
 	environment environment;
 	character player;
 	enemy enemy;
+	std::string playerSelect = "AA";
+	std::string lvlSelect = "Alpha";
 	std::vector<rain> weather;
+	SDL_Rect qRect;
+	SDL_Rect pRect;
+	SDL_Rect playerSelectionRect;
+	SDL_Rect AARect;
+	SDL_Rect SeaRect;
+	SDL_Rect alphaRect;
+	SDL_Rect omegaRect;
+	SDL_Rect levelSelectionRect;
+	SDL_Rect charRect;
+	SDL_Rect arrowRect;
+	SDL_Texture* qTex;
+	SDL_Texture* pTex;
+	SDL_Texture* AATex;
+	SDL_Texture* SeaTex;
+	SDL_Texture* alphaTex;
+	SDL_Texture* omegaTex;
+	SDL_Texture* arrowTex;
 };
 

@@ -15,5 +15,7 @@ public:
 	void platformCheck(enemy* Enemy);
 	void characterCollided(character* Character, double yPos);
 	void enemyCollided(enemy* Enemy, double yPos);
+	void setLevel(int select);
+	int level;
 };
 
