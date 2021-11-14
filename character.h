@@ -31,7 +31,7 @@ public:
 	character(SDL_Renderer* renderer, double x, double y);
 	void update(double deltaTime);
 	void attack(int leftRight, int upDown);
-	vector2 attack(SDL_Rect* enemyRect);
+	vector2 attack(SDL_Rect enemyRect);
 	void fixedUpdate();
 	void collide(double width, double height);
 	void setPlatform(double yPos);

@@ -83,12 +83,12 @@ void character::attack(int leftRight, int upDown) {
 	attacking = true;
 }
 
-vector2 character::attack(SDL_Rect * enemyRect) {
-	bool hit = SDL_HasIntersection(&attackRect, enemyRect);
+vector2 character::attack(SDL_Rect enemyRect) {
+	bool hit = SDL_HasIntersection(&attackRect, &enemyRect);
 	if (hit) {
-		double xDir = x + w * 0.5 - enemyRect->x + enemyRect->w * 0.5;
+		double xDir = x + w * 0.5 - enemyRect.x + enemyRect.w * 0.5;
 		std::cout << xDir << std::endl;
-		double yDir = attackRect.y + attackRect.h * 0.5 - enemyRect->y + enemyRect->h * 0.5;
+		double yDir = attackRect.y + attackRect.h * 0.5 - enemyRect.y + enemyRect.h * 0.5;
 		return vector2(-xDir, -yDir).normalize(attackForce);
 	}
 	return vector2(0, 0);

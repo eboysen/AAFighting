@@ -95,7 +95,7 @@ void game::update() {
 
 	player.update(deltaTime);
 	if (player.isAttacking()) {
-		vector2 kickback = player.attack(&enemy.getRect());
+		vector2 kickback = player.attack(enemy.getRect());
 		enemy.applyKickback(kickback.x, kickback.y);
 	}
 	enemy.think(&(player));
