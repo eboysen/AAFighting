@@ -314,9 +314,9 @@ void game::render() {
 	if (gameOver) {
 		SDL_Rect endRect = SDL_Rect();
 		endRect.x = window_width / 4;
-		endRect.y = 3 * window_width / 4;
+		endRect.y = window_height / 4;
 		endRect.w = window_width / 2;
-		endRect.h = window_width / 2;
+		endRect.h = window_height / 2;
 		if (victory) {
 			auto win = TextureManager::loadTexture("./assets/victory.png", renderer);
 			SDL_RenderCopy(renderer, win, NULL, &endRect);
