@@ -12,5 +12,7 @@ public:
 	void renderEnvironment(SDL_Renderer * render, int width, int height);
 	void platformCheck(entity* Entity);
 	void entityCollided(entity* Entity, double yPos);
+	void setLevel(int select);
+	int level;
 };
 
