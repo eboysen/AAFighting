@@ -10,7 +10,7 @@ character::character(SDL_Renderer* renderer, double x, double y) {
 	character::x = x - 40;
 	character::y = y;
 	character::w = 80;
-	character::h = 160;
+	character::h = 120;
 	character::xSpeed = 10;
 	character::dashXSpeed = 42;
 	character::dashXDecay = 0.6;
@@ -162,7 +162,7 @@ void character::render(SDL_Renderer * renderer) {
 	SDL_Rect rect;
 	int height = static_cast<int>(h);
 	if (aimDown) {
-		height /= 2;
+		height *= 0.6;
 	}
 	rect.x = static_cast<int>(x);
 	rect.y = static_cast<int>(y - height);
@@ -173,7 +173,6 @@ void character::render(SDL_Renderer * renderer) {
 	;
 	srcRect.x = 32 * round(walkingIndex % 2);
 	srcRect.y = 32 * floor(walkingIndex / 2);
-	std::cout << walkingIndex << " " << srcRect.x << " " << srcRect.y << std::endl;
 
 	srcRect.w = 32;
 	srcRect.h = 32;
