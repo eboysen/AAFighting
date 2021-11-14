@@ -50,10 +50,10 @@ void character::collide(double width, double height) {
 
 void character::render(SDL_Renderer * renderer) {
 	SDL_Rect rect;
-	rect.x = character::x;
-	rect.y = character::y - character::h;
-	rect.w = character::w;
-	rect.h = character::h;
+	rect.x = static_cast<int>(character::x);
+	rect.y = static_cast<int>(character::y - character::h);
+	rect.w = static_cast<int>(character::w);
+	rect.h = static_cast<int>(character::h);
 	SDL_SetRenderDrawColor(renderer, 71, 71, 255, 255);
 	SDL_RenderFillRect(renderer, &rect);
 }

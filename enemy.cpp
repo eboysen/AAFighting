@@ -17,6 +17,10 @@ enemy::enemy(double x, double y) {
 	enemy::jumpSpeed = 0.6;
 }
 
+void enemy::think(character* player) {
+	
+}
+
 void enemy::update(double deltaTime) {
 	enemy::ys += GRAVITY * deltaTime;
 	if (enemy::willJump && enemy::canJump) {
@@ -44,10 +48,10 @@ void enemy::collide(double width, double height) {
 
 void enemy::render(SDL_Renderer* renderer) {
 	SDL_Rect rect;
-	rect.x = enemy::x;
-	rect.y = enemy::y - enemy::h;
-	rect.w = enemy::w;
-	rect.h = enemy::h;
+	rect.x = static_cast<int>(enemy::x);
+	rect.y = static_cast<int>(enemy::y - enemy::h);
+	rect.w = static_cast<int>(enemy::w);
+	rect.h = static_cast<int>(enemy::h);
 	SDL_SetRenderDrawColor(renderer, 255, 71, 71, 255);
 	SDL_RenderFillRect(renderer, &rect);
 }
