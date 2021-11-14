@@ -6,7 +6,7 @@ const double GRAVITY = 1.4;
 
 character::character() {}
 character::character(SDL_Renderer* renderer, double x, double y) {
-	character::texture = TextureManager::loadTexture("./assets/player.png", renderer);
+	character::texture = TextureManager::loadTexture("./assets/playerWalk.png", renderer);
 	character::x = x - 40;
 	character::y = y;
 	character::w = 80;
@@ -22,12 +22,24 @@ character::character(SDL_Renderer* renderer, double x, double y) {
 	character::attacking = false;
 	character::attackDelay = 0.1;
 	character::attackForce = 20;
+	character::maxWalkIndex = 5;
+	character::walkTimeDelay = 0.1;
 }
 
 void character::update(double deltaTime) {
+	int leftRight = (moveLeft ? -1 : 0) + (moveRight ? 1 : 0);
+	if (leftRight != 0) {
+		lastWalkTime += deltaTime;
+		if (lastWalkTime > walkTimeDelay) {
+			lastWalkTime = 0;
+			if (++walkingIndex >= maxWalkIndex) {
+				walkingIndex = 0;
+			}
+		}
+	}
+
 	lastAttack += deltaTime;
 	if (willAttack && lastAttack >= attackDelay && canAttack) {
-		int leftRight = (moveLeft ? -1 : 0) + (moveRight ? 1 : 0);
 		int upDown = (aimUp ? -1 : 0) + (aimDown ? 1 : 0);
 		character::attack(leftRight, upDown);
 		lastAttack = 0;
@@ -156,8 +168,22 @@ void character::render(SDL_Renderer * renderer) {
 	rect.y = static_cast<int>(y - height);
 	rect.w = static_cast<int>(w);
 	rect.h = static_cast<int>(height);
+
+	SDL_Rect srcRect;
+	;
+	srcRect.x = 32 * round(walkingIndex % 2);
+	srcRect.y = 32 * floor(walkingIndex / 2);
+	std::cout << walkingIndex << " " << srcRect.x << " " << srcRect.y << std::endl;
+
+	srcRect.w = 32;
+	srcRect.h = 32;
 	SDL_SetRenderDrawColor(renderer, 71, 71, 255, 255);
-	SDL_RenderCopy(renderer, texture, NULL, &rect);
+	if (facingRight) {
+		SDL_RenderCopy(renderer, texture, &srcRect, &rect);
+	}
+	else {
+		SDL_RenderCopyEx(renderer, texture, &srcRect, &rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+	}
 
 	if (lastAttack < attackDelay - 0.01) {
 		SDL_SetRenderDrawColor(renderer, 200, 0, 0, 255);

@@ -11,7 +11,6 @@ game::game(Uint16 width, Uint16 height) {
 	game::player = character::character(renderer, width * 0.2, height * 0.8);
 	game::enemy = enemy::enemy(width * 0.8, height * 0.8);
 	game::now = SDL_GetPerformanceCounter();
-	game::environment = &(environment::environment(renderer));
 	game::weather;
 	for (int i = 0; i < 250; i++) {
 		int x = rand() % width;
@@ -19,6 +18,8 @@ game::game(Uint16 width, Uint16 height) {
 		rain newRain = rain(x, y, height);
 		weather.push_back(newRain);
 	}
+}
+	game::environment = environment::environment(renderer);
 }
 
 game::~game() {
@@ -113,6 +114,7 @@ void game::update() {
 	for (int i = 0; i < weather.size(); i++) {
 		weather.at(i).update(deltaTime);
 	}
+	environment.platformCheck(& player);
 }
 
 void game::render() {
@@ -122,6 +124,7 @@ void game::render() {
 		weather.at(i).render(renderer);
 	}
 	environment->renderEnvironment(renderer, window_width, window_height);
+	environment.renderEnvironment(renderer,window_width,window_height);
 	enemy.render(renderer);
 	player.render(renderer);
 	

@@ -28,7 +28,7 @@ private:
 	Uint64 now;
 	Uint64 last = 0;
 	double currentTime = 0;
-	environment* environment;
+	environment environment;
 	character player;
 	enemy enemy;
 	std::vector<rain> weather;

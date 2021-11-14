@@ -79,4 +79,8 @@ private:
 	bool attacking;
 	SDL_Rect attackRect;
 	double attackForce;
+	double lastWalkTime = 0;
+	double walkTimeDelay;
+	int walkingIndex = 0;
+	int maxWalkIndex;
 };
