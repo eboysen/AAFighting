@@ -84,13 +84,13 @@ void environment::platformCheck(character* Character) {
 			Character->getY() > platformTiles.at(y).y * size &&
 			Character->getY() < (platformTiles.at(y).y + 1) * size) {
 			// Right corner character to left corner tile
-			if (Character->getX() + Character->getW() / 2 > platformTiles.at(y).x * size &&
-				Character->getX() - Character->getW() / 2 < platformTiles.at(y).x * size) {
+			if (Character->getX() + Character->getW() > platformTiles.at(y).x * size &&
+				Character->getX() < platformTiles.at(y).x * size) {
 				environment::characterCollided(Character, platformTiles.at(y).y * size);
 			}
 			// Left corner character to right corner tile
-			else if (Character->getX() - Character->getW() / 2 < platformTiles.at(y).x * size + size / 2 &&
-				Character->getX() + Character->getW() / 2 > platformTiles.at(y).x * size + size / 2) {
+			else if (Character->getX() < platformTiles.at(y).x * size + size &&
+				Character->getX() + Character->getW() > platformTiles.at(y).x * size + size) {
 				environment::characterCollided(Character, platformTiles.at(y).y * size);
 			}
 		}
