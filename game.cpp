@@ -10,7 +10,7 @@ game::game(Uint16 width, Uint16 height) {
 	game::enemy = enemy::enemy(width * 0.8, height * 0.8);
 	game::now = SDL_GetPerformanceCounter();
 	game::last = 0;
-	game::back = &environment();
+
 }
 
 game::~game() {
@@ -64,6 +64,8 @@ void game::update() {
 	game::enemy.think(&(game::player));
 	game::enemy.update(deltaTime);
 	game::enemy.collide(game::window_width, game::window_height);
+
+	game::back->platformCheck(& player);
 }
 
 void game::render() {
