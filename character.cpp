@@ -1,13 +1,16 @@
 #include "character.h"
 #include <iostream>
+#include "TextureManager.h"
 
 const float GRAVITY = 1.4;
 
 character::character() {
-	character(0, 0);
 }
 
-character::character(double x, double y) {
+character::character(SDL_Renderer* renderer, double x, double y) {
+	character::texture = TextureManager::loadTexture("leftCloud.png", renderer);
+	std::cout << texture << std::endl;
+	std::cout << SDL_QueryTexture(texture, NULL, NULL, 0, 0) << std::endl;
 	character::x = x - 40;
 	character::y = y;
 	character::w = 80;
@@ -162,7 +165,7 @@ void character::render(SDL_Renderer * renderer) {
 	rect.w = static_cast<int>(w);
 	rect.h = static_cast<int>(height);
 	SDL_SetRenderDrawColor(renderer, 71, 71, 255, 255);
-	SDL_RenderFillRect(renderer, &rect);
+	SDL_RenderCopy(renderer, texture, NULL, &rect);
 
 	if (lastAttack < attackDelay - 0.01) {
 		SDL_SetRenderDrawColor(renderer, 200, 0, 0, 255);
