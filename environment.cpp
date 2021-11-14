@@ -61,14 +61,14 @@ void environment::renderEnvironment(SDL_Renderer* render, int width, int height)
 			rect.x = x * size;
 			rect.y = y * size;
 			if (lvl1[y][x] == 1) {
-				SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
+				SDL_SetRenderDrawColor(render, 21, 21, 21, 255);
 				position Platform;
 				Platform.y = y;
 				Platform.x = x;
 				platformTiles.push_back(Platform);
 			}
 			else {
-				SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
+				SDL_SetRenderDrawColor(render, 71, 31, 31, 255);
 			}
 			SDL_RenderDrawRect(render, &rect);
 		}

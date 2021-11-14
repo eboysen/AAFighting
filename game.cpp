@@ -23,87 +23,92 @@ void game::update() {
 	SDL_Event event;
 	if (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
-			game::active = false;
+			active = false;
 			return;
 		}
 		switch (event.type) {
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym) {
 			case SDLK_LEFT:
-				game::player.moveLeft = true;
+				player.moveLeft = true;
 				break;
 			case SDLK_RIGHT:
-				game::player.moveRight = true;
+				player.moveRight = true;
 				break;
 			case SDLK_UP:
-				game::player.aimUp = true;
+				player.aimUp = true;
 				break;
 			case SDLK_DOWN:
-				game::player.aimDown = true;
+				player.aimDown = true;
 				break;
 			case SDLK_SPACE:
-				game::player.willJump = true;
+				player.willJump = true;
 				break;
 			case SDLK_x:
-				game::player.willDash = true;
+				player.willDash = true;
 				break;
 			case SDLK_z:
-				game::player.willAttack = true;
+				player.willAttack = true;
 				break;
 			}
 			break;
 		case SDL_KEYUP:
 			switch (event.key.keysym.sym) {
 			case SDLK_LEFT:
-				game::player.moveLeft = false;
+				player.moveLeft = false;
 				break;
 			case SDLK_RIGHT:
-				game::player.moveRight = false;
+				player.moveRight = false;
 				break;
 			case SDLK_UP:
-				game::player.aimUp = false;
+				player.aimUp = false;
 				break;
 			case SDLK_DOWN:
-				game::player.aimDown = false;
+				player.aimDown = false;
 				break;
 			case SDLK_SPACE:
-				game::player.willJump = false;
+				player.willJump = false;
 				break;
 			case SDLK_x:
-				game::player.willDash = false;
+				player.willDash = false;
 				break;
 			case SDLK_z:
-				game::player.willAttack = false;
+				player.willAttack = false;
+				player.canAttack = true;
 				break;
 			}
 			break;
 		}
 	}
-	game::last = game::now;
-	game::now = SDL_GetPerformanceCounter();
-	double deltaTime = ((game::now - game::last) / (double)SDL_GetPerformanceFrequency());
+	last = now;
+	now = SDL_GetPerformanceCounter();
+	double deltaTime = ((now - last) / (double)SDL_GetPerformanceFrequency());
 
-	game::currentTime += deltaTime;
-	while (game::currentTime > FIXED_UPDATE_TIME) {
-		game::currentTime -= FIXED_UPDATE_TIME;
-		game::player.fixedUpdate();
-		game::player.collide(game::window_width, game::window_height);
+	currentTime += deltaTime;
+	while (currentTime > FIXED_UPDATE_TIME) {
+		currentTime -= FIXED_UPDATE_TIME;
+		player.fixedUpdate();
+		player.collide(window_width, window_height);
+		enemy.fixedUpdate();
+		enemy.collide(window_width, window_height);
 	}
 
-	game::player.update(deltaTime);
-	game::enemy.think(&(game::player));
-	game::enemy.update(deltaTime);
-	game::enemy.collide(game::window_width, game::window_height);
+	player.update(deltaTime);
+	if (player.isAttacking()) {
+		vector2 kickback = player.attack(&enemy.getRect());
+		enemy.applyKickback(kickback.x, kickback.y);
+	}
+	enemy.think(&(player));
 
-	game::back->platformCheck(& player);
+	back->platformCheck(& player);
 }
 
 void game::render() {
-	SDL_SetRenderDrawColor(game::renderer, 71, 71, 71, 255);
-	SDL_RenderClear(game::renderer);
-	game::back->renderEnvironment(game::renderer,game::window_width,game::window_height);
-	game::enemy.render(game::renderer);
-	game::player.render(game::renderer);
-	SDL_RenderPresent(game::renderer);
+	SDL_SetRenderDrawColor(renderer, 71, 71, 71, 255);
+	SDL_RenderClear(renderer);
+	back->renderEnvironment(renderer,window_width,window_height);
+	enemy.render(renderer);
+	player.render(renderer);
+	SDL_RenderPresent(renderer);
 }
 
