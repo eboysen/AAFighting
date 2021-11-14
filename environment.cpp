@@ -106,6 +106,30 @@ void environment::platformCheck(character* Character) {
 	}
 }
 
+void environment::platformCheck(enemy* Enemy) {
+	int size = WIDTH / XTILE;
+	for (int y = 0; y < platformTiles.size(); y++) {
+		if (Enemy->isFalling() &&
+			Enemy->getY() > (double)platformTiles.at(y).y * size &&
+			Enemy->getY() < ((double)platformTiles.at(y).y + 1) * size) {
+			// Right corner Enemy to left corner tile
+			if (Enemy->getX() + Enemy->getW() > (double)platformTiles.at(y).x * size &&
+				Enemy->getX() < (double)platformTiles.at(y).x * size) {
+				environment::enemyCollided(Enemy, (double)platformTiles.at(y).y * size);
+			}
+			// Left corner Enemy to right corner tile
+			else if (Enemy->getX() < (double)platformTiles.at(y).x * size + size &&
+				Enemy->getX() + Enemy->getW() > (double)platformTiles.at(y).x * size + size) {
+				environment::enemyCollided(Enemy, (double)platformTiles.at(y).y * size);
+			}
+		}
+	}
+}
+
 void environment::characterCollided(character* Character, double yPos) {
 	Character->setPlatform(yPos);
+}
+
+void environment::enemyCollided(enemy* Enemy, double yPos) {
+	Enemy->setPlatform(yPos);
 }

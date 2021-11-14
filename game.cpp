@@ -90,8 +90,10 @@ void game::update() {
 		currentTime -= FIXED_UPDATE_TIME;
 		player.fixedUpdate();
 		player.collide(window_width, window_height);
+		environment->platformCheck(&player);
 		enemy.fixedUpdate();
 		enemy.collide(window_width, window_height);
+		environment->platformCheck(&enemy);
 	}
 
 	player.update(deltaTime);
@@ -100,8 +102,6 @@ void game::update() {
 		enemy.applyKickback(kickback.x, kickback.y);
 	}
 	enemy.think(&(player));
-
-	environment->platformCheck(& player);
 }
 
 void game::render() {
