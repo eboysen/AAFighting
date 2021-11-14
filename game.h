@@ -11,6 +11,7 @@
 #include "entitySet.h"
 #include "entity.h"
 #include "enemyBrain.h"
+#include "healthBar.h"
 
 class game
 {
@@ -58,5 +59,7 @@ private:
 	SDL_Texture* alphaTex;
 	SDL_Texture* omegaTex;
 	SDL_Texture* arrowTex;
+	healthBar playerHealth;
+	healthBar enemyHealth;
 };
 

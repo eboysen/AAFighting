@@ -25,6 +25,7 @@
     <ClInclude Include="entitySet.h" />
     <ClInclude Include="environment.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="healthBar.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="player.h" />
@@ -38,6 +39,7 @@
     <ClCompile Include="entitySet.cpp" />
     <ClCompile Include="environment.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="healthBar.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="rain.cpp" />
