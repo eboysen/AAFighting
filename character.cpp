@@ -41,9 +41,7 @@ void character::collide(double width, double height) {
 	character::canJump = false;
 
 	if (character::y > height) {
-		character::y = height;
-		character::ys = 0;
-		character::canJump = true;
+		character::setPlatform(height);
 	}
 	double halfWidth = character::w * 0.5;
 	if (character::x - halfWidth < 0) {
@@ -52,6 +50,12 @@ void character::collide(double width, double height) {
 	if (character::x + halfWidth > width) {
 		character::x = width - halfWidth;
 	}
+}
+
+void character::setPlatform(double yPos) {
+	character::y = yPos;
+	character::ys = 0;
+	character::canJump = true;
 }
 
 void character::render(SDL_Renderer * renderer) {
