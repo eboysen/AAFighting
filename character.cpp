@@ -8,9 +8,7 @@ character::character() {
 }
 
 character::character(SDL_Renderer* renderer, double x, double y) {
-	character::texture = TextureManager::loadTexture("leftCloud.png", renderer);
-	std::cout << texture << std::endl;
-	std::cout << SDL_QueryTexture(texture, NULL, NULL, 0, 0) << std::endl;
+	character::texture = TextureManager::loadTexture("./assets/player.png", renderer);
 	character::x = x - 40;
 	character::y = y;
 	character::w = 80;
