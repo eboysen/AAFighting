@@ -8,10 +8,8 @@ class character
 public:
 	character();
 	character(double x, double y);
-	bool moveLeft;
-	bool moveRight;
-	bool willJump;
 	void update(double deltaTime);
+	void fixedUpdate();
 	void collide(double width, double height);
 	void setPlatform(double yPos);
 	void render(SDL_Renderer * renderer);
@@ -21,15 +19,30 @@ public:
 	double getW() { return w; }
 	bool isFalling() { return ys > 0; }
 	void setY(double pos) { y = pos; }
+	bool aimUp = false;
+	bool aimDown = false;
+	bool moveLeft = false;
+	bool moveRight = false;
+	bool willJump = false;
+	bool willDash = false;
+	bool willAttack = false;
 private:
+	bool facingRight = true;
 	double x;
 	double y;
 	double w;
 	double h;
 
-	double moveX;
-	double ys;
+	double xSpeed;
+	double dashSpeed;
+	double dashDecay;
 
-	bool canJump;
+	double ys = 0;
+
+	double dashX = 0;
+	double dashY = 0;
+
+	bool canDash = false;
+	bool canJump = false;
 	double jumpSpeed;
 };

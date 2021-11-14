@@ -1,6 +1,7 @@
 #include "character.h"
+#include <iostream>
 
-const float GRAVITY = 1.5;
+const float GRAVITY = 1.4;
 
 character::character() {
 	character(0, 0);
@@ -11,25 +12,49 @@ character::character(double x, double y) {
 	character::y = y;
 	character::w = 80;
 	character::h = 160;
-	character::moveX = 200;
-	character::ys = 0;
-	character::moveLeft = 0;
-	character::moveRight = 0;
-	character::willJump = false;
-	character::canJump = false;
-	character::jumpSpeed = 0.6;
+	character::xSpeed = 10;
+	character::dashSpeed = 36;
+	character::dashDecay = 0.9;
+	character::jumpSpeed = 20;
 }
 
 void character::update(double deltaTime) {
-	int moveInput = character::moveLeft ? -1 : 0 + character::moveRight ? 1 : 0;
-	double move = character::moveX * moveInput * deltaTime;
-	character::x += move;
-	character::ys += GRAVITY * deltaTime;
-	if (character::willJump && character::canJump) {
-		character::ys = -character::jumpSpeed;
-		character::willJump = false;
+}
+
+void character::fixedUpdate() {
+	int moveInput = (moveLeft ? -1 : 0) + (moveRight ? 1 : 0);
+	if (moveInput > 0) {
+		facingRight = true;
 	}
-	character::y += character::ys;
+	else if (moveInput < 0) {
+		facingRight = false;
+	}
+	double move = xSpeed * moveInput;
+	x += move;
+	ys += GRAVITY;
+	y += ys;
+	if (willDash) {
+		int upDownInput = (aimUp ? -1 : 0) + (aimDown ? 1 : 0);
+		dashX = moveInput * dashSpeed;
+		dashY = upDownInput * dashSpeed;
+		if (dashX == 0 && dashY == 0) {
+			dashX = (facingRight ? 1 : -1) * dashSpeed;
+		}
+		ys = 0;
+		willDash = false;
+	}
+	if (willJump && canJump) {
+		ys = -jumpSpeed;
+		willJump = false;
+	}
+	if (abs(dashX) > 0) {
+		x += dashX;
+		dashX *= character::dashDecay;
+	}
+	if (abs(dashY) > 0) {
+		y += dashY;
+		dashY *= character::dashDecay;
+	}
 }
 
 void character::collide(double width, double height) {
