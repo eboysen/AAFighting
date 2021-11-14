@@ -29,11 +29,13 @@ void entityRenderer::render(SDL_Renderer* renderer, bool facingRight, double x, 
 	SDL_Rect rect = getEntityRect(x, y);
 
 	SDL_SetRenderDrawColor(renderer, 71, 71, 255, 255);
+	SDL_Rect srcRect = getWalkingRect();
 	if (facingRight) {
-		SDL_RenderCopy(renderer, walkingTexture, &getWalkingRect(), &rect);
+		
+		SDL_RenderCopy(renderer, walkingTexture, &srcRect,&rect);
 	}
 	else {
-		SDL_RenderCopyEx(renderer, walkingTexture, &getWalkingRect(), &rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+		SDL_RenderCopyEx(renderer, walkingTexture, &srcRect, &rect, 0, NULL, SDL_FLIP_HORIZONTAL);
 	}
 }
 SDL_Rect entityRenderer::getEntityRect(double x, double y) {
