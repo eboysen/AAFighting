@@ -22,6 +22,7 @@ entity::entity(SDL_Renderer* renderer, entitySet set, double x, double y) {
 	entity::attacking = false;
 	entity::attackDelay = 0.1;
 	entity::attackForce = 20;
+	entity::health = 100;
 }
 
 // Generic
@@ -197,4 +198,8 @@ void entity::setPlatform(double y) {
 void entity::applyKickback(double x, double y) {
 	xVel += x;
 	yVel += y;
+	damage(1);
+}
+void entity::damage(int amount) {
+	health -= amount;
 }

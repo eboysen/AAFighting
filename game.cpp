@@ -2,6 +2,8 @@
 
 const double FIXED_UPDATE_TIME = 0.02;
 
+// ---------------- CONSTRUCTOR -----------------
+
 game::game(Uint16 width, Uint16 height) {
 	game::active = true;
 	game::window_width = width;
@@ -16,48 +18,47 @@ game::game(Uint16 width, Uint16 height) {
 	game::now = SDL_GetPerformanceCounter();
 	game::environment = environment::environment(renderer);
 	int center = window_width / 2;
-	qRect.x =  center- 64;
+	qRect.x = center - 64;
 	qRect.y = 350;
 	qRect.h = 128;
 	qRect.w = 128;
 	qTex = TextureManager::loadTexture("./assets/quit.png", renderer);
-	pRect.x =center - 64;
+	pRect.x = center - 64;
 	pRect.y = 200;
 	pRect.h = 128;
 	pRect.w = 128;
 	pTex = TextureManager::loadTexture("./assets/play.png", renderer);
 
-	
 	AARect.w = 64;
 	AARect.h = 64;
-	AARect.x = center-100;
+	AARect.x = center - 100;
 	AARect.y = 200;
-	
+
 	SeaRect.w = 64;
 	SeaRect.h = 64;
-	SeaRect.x = center +36;
+	SeaRect.x = center + 36;
 	SeaRect.y = 200;
 
 	playerSelectionRect.w = 70;
 	playerSelectionRect.h = 70;
-	playerSelectionRect.x = AARect.x-3;
-	playerSelectionRect.y = AARect.y-3;
-	
+	playerSelectionRect.x = AARect.x - 3;
+	playerSelectionRect.y = AARect.y - 3;
+
 	alphaRect.w = 64;
 	alphaRect.h = 64;
-	alphaRect.x = center-100;
+	alphaRect.x = center - 100;
 	alphaRect.y = 280;
-	
+
 	omegaRect.w = 64;
 	omegaRect.h = 64;
-	omegaRect.x = center+36;
+	omegaRect.x = center + 36;
 	omegaRect.y = 280;
-	
+
 	levelSelectionRect.w = 70;
 	levelSelectionRect.h = 70;
-	levelSelectionRect.x = alphaRect.x-3;
-	levelSelectionRect.y = alphaRect.y-3;
-	
+	levelSelectionRect.x = alphaRect.x - 3;
+	levelSelectionRect.y = alphaRect.y - 3;
+
 	charRect.w = 32;
 	charRect.h = 32;
 	charRect.x = 0;
@@ -80,13 +81,106 @@ game::game(Uint16 width, Uint16 height) {
 		rain newRain = rain(x, y, height);
 		weather.push_back(newRain);
 	}
+	SDL_Rect healthBarRect = SDL_Rect();
+	double w = width / 4;
+	healthBarRect.x = 40;
+	healthBarRect.y = 40;
+	healthBarRect.w = w;
+	healthBarRect.h = 40;
+	game::playerHealth = healthBar(renderer, healthBarRect, player.getHealth(), true);
+	healthBarRect.x = width - w - 40;
+	game::enemyHealth = healthBar(renderer, healthBarRect, enemy.getHealth(), false);
 }
 
-game::~game() {
-	SDL_DestroyRenderer(game::renderer);
-	SDL_DestroyWindow(game::window);
-	SDL_Quit();
+// -------------------- MENU --------------------
+
+void game::menuUpdate() {
+	SDL_Event event;
+	if (SDL_PollEvent(&event)) {
+		if (event.type == SDL_QUIT) {
+			menuActive = false;
+			active = false;
+			return;
+		}
+		switch (event.type) {
+		case SDL_MOUSEBUTTONDOWN:
+			SDL_Point mousePos = { event.button.x,event.button.y };
+			if (SDL_PointInRect(&mousePos, &pRect) && startMenu) {
+				startMenu = false;
+			}
+			else if (SDL_PointInRect(&mousePos, &qRect) && startMenu) {
+				menuActive = false;
+				active = false;
+			}
+			else if (SDL_PointInRect(&mousePos, &AARect) && !startMenu) {
+				playerSelect = "AA";
+				playerSelectionRect.x = AARect.x - 3;
+				playerSelectionRect.y = AARect.y - 3;
+			}
+			else if (SDL_PointInRect(&mousePos, &SeaRect) && !startMenu) {
+				playerSelect = "Sea";
+				playerSelectionRect.x = SeaRect.x - 3;
+				playerSelectionRect.y = SeaRect.y - 3;
+			}
+			else if (SDL_PointInRect(&mousePos, &alphaRect) && !startMenu) {
+				lvlSelect = "alpha";
+				levelSelectionRect.x = alphaRect.x - 3;
+				levelSelectionRect.y = alphaRect.y - 3;
+			}
+			else if (SDL_PointInRect(&mousePos, &omegaRect) && !startMenu) {
+				lvlSelect = "omega";
+				levelSelectionRect.x = omegaRect.x - 3;
+				levelSelectionRect.y = omegaRect.y - 3;
+			}
+			else if (SDL_PointInRect(&mousePos, &arrowRect) && !startMenu) {
+				characterSelect = false;
+				menuActive = false;
+				std::cout << lvlSelect << std::endl;
+				if (lvlSelect == "alpha") {
+					environment.setLevel(1);
+				}
+				if (lvlSelect == "omega") {
+					environment.setLevel(0);
+				}
+				environment.renderEnvironment(renderer, window_width, window_height);
+				entitySet set1 = entitySet("./assets/playerWalk.png", 5, 0.1);
+				entitySet set2 = entitySet("./assets/seaworld.png", 10, 0.1);
+				if (playerSelect == "AA") {
+					game::player = entity::entity(renderer, set1, window_width * 0.2, window_height * 0.8);
+					game::enemy = entity::entity(renderer, set2, window_width * 0.8, window_height * 0.8);
+				}
+				else {
+					game::player = entity::entity(renderer, set2, window_width * 0.2, window_height * 0.8);
+					game::enemy = entity::entity(renderer, set1, window_width * 0.8, window_height * 0.8);
+				}
+			}
+			break;
+
+		}
+	}
 }
+
+void game::menuRender() {
+	SDL_SetRenderDrawColor(renderer, 100, 0, 0, 255);
+	SDL_RenderClear(renderer);
+	if (startMenu) {
+		SDL_RenderCopy(renderer, pTex, NULL, &pRect);
+		SDL_RenderCopy(renderer, qTex, NULL, &qRect);
+	}
+	else if (characterSelect) {
+		SDL_RenderCopy(renderer, AATex, &charRect, &AARect);
+		SDL_RenderCopy(renderer, SeaTex, &charRect, &SeaRect);
+		SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+		SDL_RenderDrawRect(renderer, &playerSelectionRect);
+		SDL_RenderCopy(renderer, alphaTex, NULL, &alphaRect);
+		SDL_RenderCopy(renderer, omegaTex, NULL, &omegaRect);
+		SDL_RenderDrawRect(renderer, &levelSelectionRect);
+		SDL_RenderCopy(renderer, arrowTex, NULL, &arrowRect);
+	}
+	SDL_RenderPresent(renderer);
+}
+
+// -------------------- GAME --------------------
 
 void game::update() {
 	SDL_Event event;
@@ -169,12 +263,16 @@ void game::update() {
 		enemy.applyKickback(kickback.x, kickback.y);
 	}
 	enemy.update(deltaTime);
-	//enemy.think(&(player));
 
 	for (int i = 0; i < weather.size(); i++) {
 		weather.at(i).update(deltaTime);
 	}
 	environment.platformCheck(& player);
+
+	playerHealth.setHealth(player.getHealth());
+	enemyHealth.setHealth(enemy.getHealth());
+	playerHealth.update(deltaTime);
+	enemyHealth.update(deltaTime);
 }
 
 void game::render() {
@@ -187,93 +285,13 @@ void game::render() {
 	enemy.render(renderer);
 	player.render(renderer);
 	
+	playerHealth.render(renderer);
+	enemyHealth.render(renderer);
 	SDL_RenderPresent(renderer);
 }
 
-void game::menuUpdate() {
-	SDL_Event event;
-	if (SDL_PollEvent(&event)) {
-		if (event.type == SDL_QUIT) {
-			menuActive = false;
-			active = false;
-			return;
-		}
-		switch (event.type) {
-		case SDL_MOUSEBUTTONDOWN :
-			SDL_Point mousePos = { event.button.x,event.button.y };
-				if (SDL_PointInRect(&mousePos,&pRect) && startMenu) {
-					startMenu = false;
-				}
-				else if (SDL_PointInRect(&mousePos, &qRect) && startMenu) {
-					menuActive = false;
-					active = false;
-				}
-				else if (SDL_PointInRect(&mousePos, &AARect) && !startMenu) {
-					playerSelect = "AA";
-					playerSelectionRect.x = AARect.x - 3;
-					playerSelectionRect.y = AARect.y - 3;
-				}
-				else if (SDL_PointInRect(&mousePos, &SeaRect) && !startMenu) {
-					playerSelect = "Sea";
-					playerSelectionRect.x = SeaRect.x - 3;
-					playerSelectionRect.y = SeaRect.y - 3;
-				}
-				else if (SDL_PointInRect(&mousePos, &alphaRect) && !startMenu) {
-					lvlSelect = "alpha";
-					levelSelectionRect.x = alphaRect.x - 3;
-					levelSelectionRect.y = alphaRect.y - 3;
-				}
-				else if (SDL_PointInRect(&mousePos, &omegaRect) && !startMenu) {
-					lvlSelect = "omega";
-					levelSelectionRect.x = omegaRect.x - 3;
-					levelSelectionRect.y = omegaRect.y - 3;
-				}
-				else if (SDL_PointInRect(&mousePos, &arrowRect) && !startMenu) {
-					characterSelect = false;
-					menuActive = false;
-					std::cout << lvlSelect << std::endl;
-					if (lvlSelect == "alpha") {
-						environment.setLevel(1);
-					}
-					if (lvlSelect == "omega") {
-						environment.setLevel(0);
-					}
-					environment.renderEnvironment(renderer, window_width, window_height);
-					entitySet set1 = entitySet("./assets/playerWalk.png", 5, 0.1);
-					entitySet set2 = entitySet("./assets/seaworld.png", 10, 0.1);
-					if (playerSelect == "AA") {
-						game::player = entity::entity(renderer, set1, window_width * 0.2, window_height * 0.8);
-						game::enemy = entity::entity(renderer, set2, window_width * 0.8, window_height * 0.8);
-					}
-					else {
-						game::player = entity::entity(renderer, set2, window_width * 0.2, window_height * 0.8);
-						game::enemy = entity::entity(renderer, set1, window_width * 0.8, window_height * 0.8);
-					}
-				}
-			break;
-			
-		}
-	}
+game::~game() {
+	SDL_DestroyRenderer(game::renderer);
+	SDL_DestroyWindow(game::window);
+	SDL_Quit();
 }
-
-void game::menuRender() {
-	SDL_SetRenderDrawColor(renderer, 100, 0,0, 255);
-	SDL_RenderClear(renderer);
-	if (startMenu) {
-		SDL_RenderCopy(renderer, pTex, NULL, &pRect);
-		SDL_RenderCopy(renderer, qTex, NULL, &qRect);
-	}
-	else if (characterSelect) {
-		SDL_RenderCopy(renderer, AATex, &charRect, &AARect);
-		SDL_RenderCopy(renderer, SeaTex, &charRect, &SeaRect);
-		SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-		SDL_RenderDrawRect(renderer, &playerSelectionRect);
-		SDL_RenderCopy(renderer, alphaTex, NULL, &alphaRect);
-		SDL_RenderCopy(renderer, omegaTex, NULL,&omegaRect);
-		SDL_RenderDrawRect(renderer, &levelSelectionRect);
-		SDL_RenderCopy(renderer, arrowTex, NULL, &arrowRect);
-	}
-	SDL_RenderPresent(renderer);
-
-}
-

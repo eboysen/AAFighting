@@ -85,7 +85,6 @@ void environment::renderEnvironment(SDL_Renderer* render, int width, int height)
 	srect.y = 0;
 	rect.h = size;
 	rect.w = size;
-	std::cout << "Level" << environment::level << std::endl;
 	for (int x = 0; x < XTILE; x++) {
 		for (int y = 0; y < YTILE; y++) {
 			rect.x = x * size;

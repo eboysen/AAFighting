@@ -48,6 +48,9 @@
     <ClInclude Include="enemyBrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="healthBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -78,6 +81,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="enemyBrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="healthBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

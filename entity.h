@@ -38,9 +38,11 @@ public:
 	vector2 attack(SDL_Rect enemyRect);
 	void setPlatform(double y);
 	void applyKickback(double x, double y);
+	void damage(int amount);
 
 	// Properties
 	SDL_Rect getHitbox() { return renderer.getEntityRect(xPos, yPos); }
+	int getHealth() { return health; }
 	double getX() { return xPos; }
 	double getY() { return yPos; }
 	double getH() { return renderer.getHeight(); }
@@ -52,6 +54,7 @@ private:
 	// Base
 	entityRenderer renderer;
 	bool facingRight = true;
+	int health;
 
 	// X and Y Position (Bottom-Left Corner)
 	double xPos;
