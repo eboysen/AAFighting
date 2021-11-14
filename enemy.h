@@ -17,9 +17,12 @@ public:
 	enemy(double x, double y);
 	void think(character* player);
 	void update(double deltaTime);
+	void fixedUpdate();
 	void collide(double width, double height);
+	void applyKickback(double x, double y);
 	void render(SDL_Renderer* renderer);
 	bool willJump;
+	SDL_Rect getRect();
 private:
 	EnemyActions action;
 	double x;
@@ -27,6 +30,7 @@ private:
 	double w;
 	double h;
 
+	double xs;
 	double ys;
 
 	bool canJump;

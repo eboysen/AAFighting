@@ -24,7 +24,8 @@ private:
 	Uint16 window_width;
 	Uint16 window_height;
 	Uint64 now;
-	Uint64 last;
+	Uint64 last = 0;
+	double currentTime = 0;
 	environment* back;
 	character player;
 	enemy enemy;

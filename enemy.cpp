@@ -1,4 +1,5 @@
 #include "enemy.h"
+#include <iostream>
 
 const float GRAVITY = 1.5;
 
@@ -12,6 +13,7 @@ enemy::enemy(double x, double y) {
 	enemy::y = y;
 	enemy::w = 80;
 	enemy::h = 160;
+	enemy::xs = 0;
 	enemy::ys = 0;
 	enemy::willJump = false;
 	enemy::canJump = false;
@@ -21,16 +23,16 @@ enemy::enemy(double x, double y) {
 void enemy::think(character* player) {
 	int horzSeperation = 0;// enemy::x - player.x;
 	int vertSeperation = 0;// enemy::y - player.y;
-	switch (enemy::action) {
+	switch (action) {
 	case EnemyActions::Idle:
 		if (abs(horzSeperation) > 350) {
 			// Move towards player
-			enemy::action = EnemyActions::MoveTowards;
+			action = EnemyActions::MoveTowards;
 		}
 		else if (abs(horzSeperation) < 50) {
 			// Move away from player
 			// Block?
-			enemy::action = EnemyActions::MoveAway;
+			action = EnemyActions::MoveAway;
 		}
 		else if (vertSeperation > 100) {
 			// Jump
@@ -50,36 +52,61 @@ void enemy::think(character* player) {
 }
 
 void enemy::update(double deltaTime) {
-	enemy::ys += GRAVITY * deltaTime;
-	if (enemy::willJump && enemy::canJump) {
-		enemy::ys = -enemy::jumpSpeed;
-		enemy::willJump = false;
+}
+
+void enemy::fixedUpdate() {
+	/*
+	int moveInput = (moveLeft ? -1 : 0) + (moveRight ? 1 : 0);
+	if (moveInput > 0) {
+		facingRight = true;
 	}
-	enemy::y += enemy::ys;
+	else if (moveInput < 0) {
+		facingRight = false;
+	}
+	double move = xSpeed * moveInput;
+	x += move;
+	*/
+	ys += GRAVITY;
+	y += ys;
+	if (xs > 0.01 || xs < 0.01) {
+		x += xs;
+		xs *= 0.6;
+	}
 }
 
 void enemy::collide(double width, double height) {
-	enemy::canJump = false;
+	canJump = false;
 
-	if (enemy::y > height) {
-		enemy::y = height;
-		enemy::ys = 0;
-		enemy::canJump = true;
+	if (y > height) {
+		y = height;
+		ys = 0;
+		canJump = true;
 	}
-	if (enemy::x < 0) {
-		enemy::x = 0;
+	if (x < 0) {
+		x = 0;
 	}
-	if (enemy::x > width - enemy::w) {
-		enemy::x = width - enemy::w;
+	if (x > width - w) {
+		x = width - w;
 	}
 }
 
+void enemy::applyKickback(double x, double y) {
+	std::cout << x << " " << y << std::endl;
+	xs += x;
+	ys += y / 2;
+}
+
 void enemy::render(SDL_Renderer* renderer) {
-	SDL_Rect rect;
-	rect.x = static_cast<int>(enemy::x);
-	rect.y = static_cast<int>(enemy::y - enemy::h);
-	rect.w = static_cast<int>(enemy::w);
-	rect.h = static_cast<int>(enemy::h);
+	SDL_Rect rect = getRect();
 	SDL_SetRenderDrawColor(renderer, 255, 71, 71, 255);
 	SDL_RenderFillRect(renderer, &rect);
+}
+
+SDL_Rect enemy::getRect() {
+	SDL_Rect rect;
+	rect.x = static_cast<int>(x);
+	rect.y = static_cast<int>(y - h);
+	rect.w = static_cast<int>(w);
+	rect.h = static_cast<int>(h);
+	return rect;
 }
