@@ -295,7 +295,7 @@ void game::update() {
 		player.lock();
 		enemy.kill();
 		gameOver = true;
-		victory = false;
+		victory = true;
 	}
 }
 
