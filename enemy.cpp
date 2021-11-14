@@ -1,7 +1,7 @@
 #include "enemy.h"
 #include <iostream>
 
-const float GRAVITY = 1.4;
+const double GRAVITY = 1.4;
 
 enemy::enemy() {}
 enemy::enemy(double x, double y) {
@@ -93,7 +93,7 @@ void enemy::setPlatform(double yPos) {
 
 void enemy::applyKickback(double x, double y) {
 	xs += x;
-	ys += y / 2;
+	ys += y;
 }
 
 void enemy::render(SDL_Renderer* renderer) {

@@ -7,7 +7,7 @@
 enum EnemyActions {
 	Idle,
 	MoveAway,
-	MoveTowards,
+	MoveTowards
 };
 
 class enemy
@@ -22,6 +22,11 @@ public:
 	void setPlatform(double yPos);
 	void applyKickback(double x, double y);
 	void render(SDL_Renderer* renderer);
+	double getX() { return x; }
+	double getY() { return y; }
+	double getH() { return h; }
+	double getW() { return w; }
+	bool isFalling() { return ys > 0; }
 	bool willJump;
 	SDL_Rect getRect();
 private:
