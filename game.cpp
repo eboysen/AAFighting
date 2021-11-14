@@ -8,8 +8,10 @@ game::game(Uint16 width, Uint16 height) {
 	game::window_height = height;
 	game::window = SDL_CreateWindow("AAFighter", 100, 100, width, height, SDL_WINDOW_OPENGL);
 	game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	game::player = character::character(renderer, width * 0.2, height * 0.8);
-	game::enemy = enemy::enemy(width * 0.8, height * 0.8);
+	animationSet set1 = animationSet("./assets/playerWalk.png", 5, 0.1);
+	animationSet set2 = animationSet("./assets/seaworld.png", 10, 0.1);
+	game::player = character::character(renderer, set1, width * 0.2, height * 0.8);
+	game::enemy = enemy::enemy(renderer, set2, width * 0.8, height * 0.8);
 	game::now = SDL_GetPerformanceCounter();
 	game::environment = environment::environment(renderer);
 	game::weather;
@@ -108,6 +110,7 @@ void game::update() {
 		vector2 kickback = player.attack(enemy.getRect());
 		enemy.applyKickback(kickback.x, kickback.y);
 	}
+	enemy.update(deltaTime);
 	enemy.think(&(player));
 
 	for (int i = 0; i < weather.size(); i++) {
