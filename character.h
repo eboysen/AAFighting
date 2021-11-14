@@ -28,7 +28,7 @@ class character
 {
 public:
 	character();
-	character(double x, double y);
+	character(SDL_Renderer* renderer, double x, double y);
 	void update(double deltaTime);
 	void attack(int leftRight, int upDown);
 	vector2 attack(SDL_Rect* enemyRect);
@@ -52,6 +52,7 @@ public:
 	bool willAttack = false;
 	bool canAttack;
 private:
+	SDL_Texture * texture;
 	bool facingRight = true;
 	double x;
 	double y;
