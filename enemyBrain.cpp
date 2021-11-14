@@ -32,22 +32,25 @@ void enemyBrain::think(entity* self, entity* other) {
 		self->input(self->Right, false);
 		self->input(self->Special, false);
 		self->input(self->Up, false);
-		
-		
-		if (abs(horzSeperation) < 50) {
+		if (maxIdle <= 0) {
+			action = EnemyAction::MoveTowards;
+			maxIdle = 10;
+			break;
+		}
+		if (abs(horzSeperation) > 350) {
+			// Move towards player
+			
+			action = MoveTowards;
+			// ACTIONS
+		}
+		else if (abs(horzSeperation) < 50) {
 			// Move away from player
 			// Block?
-			self->input(self->Attack, true);
+			
 			if (rand() % 2 == 1)
 				action = EnemyAction::MoveAway;
 			else
 				action = EnemyAction::Attack;
-		}
-		else if (abs(horzSeperation) > 350 || rand() % 2 == 1) {
-		// Move towards player
-
-		action = MoveTowards;
-		// ACTIONS
 		}
 		else if (vertSeperation > 100) {
 			
@@ -58,7 +61,7 @@ void enemyBrain::think(entity* self, entity* other) {
 			// Downwards attack
 		}
 		else {
-			action = EnemyAction::Attack;
+			// Attack
 		}
 		break;
 	case EnemyAction::MoveTowards:
@@ -69,7 +72,7 @@ void enemyBrain::think(entity* self, entity* other) {
 		else {
 			self->input(self->Right, true);
 		}
-		if (abs(horzSeperation < 50)) {
+		if (abs(horzSeperation < 100)) {
 			action = EnemyAction::Idle;
 		}
 		break;
