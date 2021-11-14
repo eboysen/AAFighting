@@ -19,20 +19,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="enemy.h" />
+    <ClInclude Include="enemyBrain.h" />
+    <ClInclude Include="entity.h" />
+    <ClInclude Include="entityRenderer.h" />
+    <ClInclude Include="entitySet.h" />
     <ClInclude Include="environment.h" />
-    <ClInclude Include="character.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="vector2.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="rain.h" />
     <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemyBrain.cpp" />
+    <ClCompile Include="entity.cpp" />
+    <ClCompile Include="entityRenderer.cpp" />
+    <ClCompile Include="entitySet.cpp" />
     <ClCompile Include="environment.cpp" />
-    <ClCompile Include="character.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="rain.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>

@@ -86,50 +86,26 @@ void environment::renderEnvironment(SDL_Renderer* render, int width, int height)
 	}
 }
 
-void environment::platformCheck(character* Character) {
+void environment::platformCheck(entity* Entity) {
 	int size = WIDTH / XTILE;
 	for (int y = 0; y < platformTiles.size(); y++) {
-		if (Character->isFalling() &&
-			Character->getY() > (double)platformTiles.at(y).y * size &&
-			Character->getY() < ((double)platformTiles.at(y).y + 1) * size) {
-			// Right corner character to left corner tile
-			if (Character->getX() + Character->getW() > (double)platformTiles.at(y).x * size &&
-				Character->getX() < (double)platformTiles.at(y).x * size) {
-				environment::characterCollided(Character, (double)platformTiles.at(y).y * size);
+		if (Entity->isFalling() &&
+			Entity->getY() > (double)platformTiles.at(y).y * size &&
+			Entity->getY() < ((double)platformTiles.at(y).y + 1) * size) {
+			// Right corner Entity to left corner tile
+			if (Entity->getX() + Entity->getW() > (double)platformTiles.at(y).x * size &&
+				Entity->getX() < (double)platformTiles.at(y).x * size) {
+				environment::entityCollided(Entity, (double)platformTiles.at(y).y * size);
 			}
-			// Left corner character to right corner tile
-			else if (Character->getX() < (double)platformTiles.at(y).x * size + size &&
-				Character->getX() + Character->getW() > (double)platformTiles.at(y).x * size + size) {
-				environment::characterCollided(Character, (double)platformTiles.at(y).y * size);
+			// Left corner Entity to right corner tile
+			else if (Entity->getX() < (double)platformTiles.at(y).x * size + size &&
+				Entity->getX() + Entity->getW() > (double)platformTiles.at(y).x * size + size) {
+				environment::entityCollided(Entity, (double)platformTiles.at(y).y * size);
 			}
 		}
 	}
 }
 
-void environment::platformCheck(enemy* Enemy) {
-	int size = WIDTH / XTILE;
-	for (int y = 0; y < platformTiles.size(); y++) {
-		if (Enemy->isFalling() &&
-			Enemy->getY() > (double)platformTiles.at(y).y * size &&
-			Enemy->getY() < ((double)platformTiles.at(y).y + 1) * size) {
-			// Right corner Enemy to left corner tile
-			if (Enemy->getX() + Enemy->getW() > (double)platformTiles.at(y).x * size &&
-				Enemy->getX() < (double)platformTiles.at(y).x * size) {
-				environment::enemyCollided(Enemy, (double)platformTiles.at(y).y * size);
-			}
-			// Left corner Enemy to right corner tile
-			else if (Enemy->getX() < (double)platformTiles.at(y).x * size + size &&
-				Enemy->getX() + Enemy->getW() > (double)platformTiles.at(y).x * size + size) {
-				environment::enemyCollided(Enemy, (double)platformTiles.at(y).y * size);
-			}
-		}
-	}
-}
-
-void environment::characterCollided(character* Character, double yPos) {
-	Character->setPlatform(yPos);
-}
-
-void environment::enemyCollided(enemy* Enemy, double yPos) {
-	Enemy->setPlatform(yPos);
+void environment::entityCollided(entity* Entity, double y) {
+	Entity->setPlatform(y);
 }

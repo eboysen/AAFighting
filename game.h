@@ -7,9 +7,10 @@
 #include "SDL_image.h"
 
 #include "environment.h"
-#include "character.h"
-#include "enemy.h"
 #include "rain.h"
+#include "entitySet.h"
+#include "entity.h"
+#include "enemyBrain.h"
 
 class game
 {
@@ -29,8 +30,9 @@ private:
 	Uint64 last = 0;
 	double currentTime = 0;
 	environment environment;
-	character player;
-	enemy enemy;
+	entity player;
+	entity enemy;
+	enemyBrain enemyBrain;
 	std::vector<rain> weather;
 };
 
