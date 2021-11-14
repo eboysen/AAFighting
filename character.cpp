@@ -1,12 +1,11 @@
 #include "character.h"
 #include <iostream>
-#include "TextureManager.h"
 
 const double GRAVITY = 1.4;
 
 character::character() {}
-character::character(SDL_Renderer* renderer, double x, double y) {
-	character::texture = TextureManager::loadTexture("./assets/playerWalk.png", renderer);
+character::character(SDL_Renderer* renderer, animationSet set, double x, double y) {
+	character::texture = TextureManager::loadTexture(set.filePath, renderer);
 	character::x = x - 40;
 	character::y = y;
 	character::w = 80;
@@ -22,8 +21,8 @@ character::character(SDL_Renderer* renderer, double x, double y) {
 	character::attacking = false;
 	character::attackDelay = 0.1;
 	character::attackForce = 20;
-	character::maxWalkIndex = 5;
-	character::walkTimeDelay = 0.1;
+	character::maxWalkIndex = set.maxAnimationFrames;
+	character::walkTimeDelay = set.animationFrameDelay;
 }
 
 void character::update(double deltaTime) {
@@ -170,10 +169,8 @@ void character::render(SDL_Renderer * renderer) {
 	rect.h = static_cast<int>(height);
 
 	SDL_Rect srcRect;
-	;
 	srcRect.x = 32 * round(walkingIndex % 2);
 	srcRect.y = 32 * floor(walkingIndex / 2);
-
 	srcRect.w = 32;
 	srcRect.h = 32;
 	SDL_SetRenderDrawColor(renderer, 71, 71, 255, 255);

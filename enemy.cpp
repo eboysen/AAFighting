@@ -4,7 +4,8 @@
 const double GRAVITY = 1.4;
 
 enemy::enemy() {}
-enemy::enemy(double x, double y) {
+enemy::enemy(SDL_Renderer* renderer, animationSet set, double x, double y) {
+	enemy::texture = TextureManager::loadTexture(set.filePath, renderer);
 	enemy::action = EnemyActions::Idle;
 	enemy::x = x - 40;
 	enemy::y = y;
@@ -12,9 +13,12 @@ enemy::enemy(double x, double y) {
 	enemy::h = 160;
 	enemy::xs = 0;
 	enemy::ys = 0;
+	enemy::xSpeed = 10;
 	enemy::willJump = false;
 	enemy::canJump = false;
 	enemy::jumpSpeed = 0.6;
+	enemy::maxWalkIndex = set.maxAnimationFrames;
+	enemy::walkTimeDelay = set.animationFrameDelay;
 }
 
 void enemy::think(character* player) {
@@ -49,11 +53,20 @@ void enemy::think(character* player) {
 }
 
 void enemy::update(double deltaTime) {
+	int leftRight = -1; //TODO: Add movement
+	if (leftRight != 0) {
+		lastWalkTime += deltaTime;
+		if (lastWalkTime > walkTimeDelay) {
+			lastWalkTime = 0;
+			if (++walkingIndex >= maxWalkIndex) {
+				walkingIndex = 0;
+			}
+		}
+	}
 }
 
 void enemy::fixedUpdate() {
-	/*
-	int moveInput = (moveLeft ? -1 : 0) + (moveRight ? 1 : 0);
+	int moveInput = 0; //TODO: Add movement
 	if (moveInput > 0) {
 		facingRight = true;
 	}
@@ -62,7 +75,6 @@ void enemy::fixedUpdate() {
 	}
 	double move = xSpeed * moveInput;
 	x += move;
-	*/
 	ys += GRAVITY;
 	y += ys;
 	if (xs > 0.01 || xs < 0.01) {
@@ -99,7 +111,17 @@ void enemy::applyKickback(double x, double y) {
 void enemy::render(SDL_Renderer* renderer) {
 	SDL_Rect rect = getRect();
 	SDL_SetRenderDrawColor(renderer, 255, 71, 71, 255);
-	SDL_RenderFillRect(renderer, &rect);
+	SDL_Rect srcRect;
+	srcRect.x = 32 * round(walkingIndex % 2);
+	srcRect.y = 32 * floor(walkingIndex / 2);
+	srcRect.w = 32;
+	srcRect.h = 32;
+	if (facingRight) {
+		SDL_RenderCopy(renderer, texture, &srcRect, &rect);
+	}
+	else {
+		SDL_RenderCopyEx(renderer, texture, &srcRect, &rect, 0, NULL, SDL_FLIP_HORIZONTAL);
+	}
 }
 
 SDL_Rect enemy::getRect() {

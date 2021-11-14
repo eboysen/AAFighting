@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "TextureManager.h"
 
 struct vector2 {
 	double x;
@@ -24,11 +25,22 @@ struct vector2 {
 	}
 };
 
+struct animationSet {
+	const char* filePath;
+	int maxAnimationFrames;
+	double animationFrameDelay;
+	animationSet(const char* path, int frames, double frameDelay) {
+		filePath = path;
+		maxAnimationFrames = frames;
+		animationFrameDelay = frameDelay;
+	}
+};
+
 class character
 {
 public:
 	character();
-	character(SDL_Renderer* renderer, double x, double y);
+	character(SDL_Renderer* renderer, animationSet set, double x, double y);
 	void update(double deltaTime);
 	void attack(int leftRight, int upDown);
 	vector2 attack(SDL_Rect enemyRect);
@@ -79,6 +91,7 @@ private:
 	bool attacking;
 	SDL_Rect attackRect;
 	double attackForce;
+
 	double lastWalkTime = 0;
 	double walkTimeDelay;
 	int walkingIndex = 0;

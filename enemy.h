@@ -3,6 +3,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "character.h"
+#include "TextureManager.h"
 
 enum EnemyActions {
 	Idle,
@@ -14,7 +15,7 @@ class enemy
 {
 public:
 	enemy();
-	enemy(double x, double y);
+	enemy(SDL_Renderer* renderer, animationSet set, double x, double y);
 	void think(character* player);
 	void update(double deltaTime);
 	void fixedUpdate();
@@ -30,6 +31,7 @@ public:
 	bool willJump;
 	SDL_Rect getRect();
 private:
+	SDL_Texture* texture;
 	EnemyActions action;
 	double x;
 	double y;
@@ -38,8 +40,15 @@ private:
 
 	double xs;
 	double ys;
+	double xSpeed;
 
+	bool facingRight = false;
 	bool canJump;
 	double jumpSpeed;
+
+	double lastWalkTime = 0;
+	double walkTimeDelay;
+	int walkingIndex = 0;
+	int maxWalkIndex;
 };
 
