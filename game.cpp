@@ -110,6 +110,7 @@ void game::update() {
 		vector2 kickback = player.attack(enemy.getRect());
 		enemy.applyKickback(kickback.x, kickback.y);
 	}
+	enemy.update(deltaTime);
 	enemy.think(&(player));
 
 	for (int i = 0; i < weather.size(); i++) {

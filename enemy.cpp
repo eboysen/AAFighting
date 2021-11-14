@@ -10,7 +10,7 @@ enemy::enemy(SDL_Renderer* renderer, animationSet set, double x, double y) {
 	enemy::x = x - 40;
 	enemy::y = y;
 	enemy::w = 80;
-	enemy::h = 160;
+	enemy::h = 120;
 	enemy::xs = 0;
 	enemy::ys = 0;
 	enemy::xSpeed = 10;
@@ -22,8 +22,8 @@ enemy::enemy(SDL_Renderer* renderer, animationSet set, double x, double y) {
 }
 
 void enemy::think(character* player) {
-	int horzSeperation = 0;// enemy::x - player.x;
-	int vertSeperation = 0;// enemy::y - player.y;
+	int horzSeperation = x - player->getX();
+	int vertSeperation = y - player->getY();
 	switch (action) {
 	case EnemyActions::Idle:
 		if (abs(horzSeperation) > 350) {
@@ -112,6 +112,7 @@ void enemy::render(SDL_Renderer* renderer) {
 	SDL_Rect rect = getRect();
 	SDL_SetRenderDrawColor(renderer, 255, 71, 71, 255);
 	SDL_Rect srcRect;
+	std::cout << walkingIndex << std::endl;
 	srcRect.x = 32 * round(walkingIndex % 2);
 	srcRect.y = 32 * floor(walkingIndex / 2);
 	srcRect.w = 32;
