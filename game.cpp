@@ -183,6 +183,8 @@ void game::menuRender() {
 // -------------------- GAME --------------------
 
 void game::update() {
+	enemyBrain.think(&enemy, &player);
+
 	SDL_Event event;
 	if (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {

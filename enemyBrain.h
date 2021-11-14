@@ -8,7 +8,10 @@ private:
 	static enum EnemyAction {
 		Idle,
 		MoveAway,
-		MoveTowards
+		MoveTowards,
+		DashTowards,
+		DashAway,
+		Attack
 	};
 	EnemyAction action;
 public:
