@@ -8,6 +8,11 @@ game::game(Uint16 width, Uint16 height) {
 	game::window_height = height;
 	game::window = SDL_CreateWindow("AAFighter", 100, 100, width, height, SDL_WINDOW_OPENGL);
 	game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	entitySet set1 = entitySet("./assets/playerWalk.png", 5, 0.1);
+	entitySet set2 = entitySet("./assets/seaworld.png", 10, 0.1);
+	game::player = entity::entity(renderer, set1, width * 0.2, height * 0.8);
+	game::enemy = entity::entity(renderer, set2, width * 0.8, height * 0.8);
+	game::enemyBrain;
 	game::now = SDL_GetPerformanceCounter();
 	game::environment = environment::environment(renderer);
 	int center = window_width / 2;
@@ -94,51 +99,50 @@ void game::update() {
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym) {
 			case SDLK_LEFT:
-				player.moveLeft = true;
+				player.input(player.Left, true);
 				break;
 			case SDLK_RIGHT:
-				player.moveRight = true;
+				player.input(player.Right, true);
 				break;
 			case SDLK_UP:
-				player.aimUp = true;
+				player.input(player.Up, true);
 				break;
 			case SDLK_DOWN:
-				player.aimDown = true;
+				player.input(player.Down, true);
 				break;
 			case SDLK_SPACE:
-				player.willJump = true;
+				player.input(player.Jump, true);
 				break;
 			case SDLK_x:
-				player.willDash = true;
+				player.input(player.Dash, true);
 				break;
 			case SDLK_z:
-				player.willAttack = true;
+				player.input(player.Attack, true);
 				break;
 			}
 			break;
 		case SDL_KEYUP:
 			switch (event.key.keysym.sym) {
 			case SDLK_LEFT:
-				player.moveLeft = false;
+				player.input(player.Left, false);
 				break;
 			case SDLK_RIGHT:
-				player.moveRight = false;
+				player.input(player.Right, false);
 				break;
 			case SDLK_UP:
-				player.aimUp = false;
+				player.input(player.Up, false);
 				break;
 			case SDLK_DOWN:
-				player.aimDown = false;
+				player.input(player.Down, false);
 				break;
 			case SDLK_SPACE:
-				player.willJump = false;
+				player.input(player.Jump, false);
 				break;
 			case SDLK_x:
-				player.willDash = false;
+				player.input(player.Dash, false);
 				break;
 			case SDLK_z:
-				player.willAttack = false;
-				player.canAttack = true;
+				player.input(player.Attack, false);
 				break;
 			}
 			break;
@@ -161,11 +165,11 @@ void game::update() {
 
 	player.update(deltaTime);
 	if (player.isAttacking()) {
-		vector2 kickback = player.attack(enemy.getRect());
+		vector2 kickback = player.attack(enemy.getHitbox());
 		enemy.applyKickback(kickback.x, kickback.y);
 	}
 	enemy.update(deltaTime);
-	enemy.think(&(player));
+	//enemy.think(&(player));
 
 	for (int i = 0; i < weather.size(); i++) {
 		weather.at(i).update(deltaTime);
@@ -227,22 +231,23 @@ void game::menuUpdate() {
 				else if (SDL_PointInRect(&mousePos, &arrowRect) && !startMenu) {
 					characterSelect = false;
 					menuActive = false;
-					animationSet set1 = animationSet("./assets/playerWalk.png", 5, 0.1);
-					animationSet set2 = animationSet("./assets/seaworld.png", 10, 0.1);
-					if (playerSelect == "AA") {
-						game::player = character::character(renderer, set1, window_width * 0.2, window_height * 0.8);
-						game::enemy = enemy::enemy(renderer, set2, window_width * 0.8, window_height * 0.8);
-					}
-					else {
-						game::player = character::character(renderer, set2, window_width * 0.2, window_height * 0.2);
-						game::enemy = enemy::enemy(renderer, set1, window_width * 0.8, window_height * 0.8);
-					}
 					std::cout << lvlSelect << std::endl;
-					if (lvlSelect == "Alpha") {
+					if (lvlSelect == "alpha") {
 						environment.setLevel(1);
 					}
-					if (lvlSelect == "Omega") {
+					if (lvlSelect == "omega") {
 						environment.setLevel(0);
+					}
+					environment.renderEnvironment(renderer, window_width, window_height);
+					entitySet set1 = entitySet("./assets/playerWalk.png", 5, 0.1);
+					entitySet set2 = entitySet("./assets/seaworld.png", 10, 0.1);
+					if (playerSelect == "AA") {
+						game::player = entity::entity(renderer, set1, window_width * 0.2, window_height * 0.8);
+						game::enemy = entity::entity(renderer, set2, window_width * 0.8, window_height * 0.8);
+					}
+					else {
+						game::player = entity::entity(renderer, set2, window_width * 0.2, window_height * 0.8);
+						game::enemy = entity::entity(renderer, set1, window_width * 0.8, window_height * 0.8);
 					}
 				}
 			break;
