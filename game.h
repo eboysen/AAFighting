@@ -39,7 +39,7 @@ private:
 	entity enemy;
 	enemyBrain enemyBrain;
 	std::string playerSelect = "AA";
-	std::string lvlSelect = "Alpha";
+	std::string lvlSelect = "alpha";
 	std::vector<rain> weather;
 	SDL_Rect qRect;
 	SDL_Rect pRect;

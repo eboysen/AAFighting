@@ -231,22 +231,23 @@ void game::menuUpdate() {
 				else if (SDL_PointInRect(&mousePos, &arrowRect) && !startMenu) {
 					characterSelect = false;
 					menuActive = false;
-					animationSet set1 = animationSet("./assets/playerWalk.png", 5, 0.1);
-					animationSet set2 = animationSet("./assets/seaworld.png", 10, 0.1);
-					if (playerSelect == "AA") {
-						game::player = character::character(renderer, set1, window_width * 0.2, window_height * 0.8);
-						game::enemy = enemy::enemy(renderer, set2, window_width * 0.8, window_height * 0.8);
-					}
-					else {
-						game::player = character::character(renderer, set2, window_width * 0.2, window_height * 0.2);
-						game::enemy = enemy::enemy(renderer, set1, window_width * 0.8, window_height * 0.8);
-					}
 					std::cout << lvlSelect << std::endl;
-					if (lvlSelect == "Alpha") {
+					if (lvlSelect == "alpha") {
 						environment.setLevel(1);
 					}
-					if (lvlSelect == "Omega") {
+					if (lvlSelect == "omega") {
 						environment.setLevel(0);
+					}
+					environment.renderEnvironment(renderer, window_width, window_height);
+					entitySet set1 = entitySet("./assets/playerWalk.png", 5, 0.1);
+					entitySet set2 = entitySet("./assets/seaworld.png", 10, 0.1);
+					if (playerSelect == "AA") {
+						game::player = entity::entity(renderer, set1, window_width * 0.2, window_height * 0.8);
+						game::enemy = entity::entity(renderer, set2, window_width * 0.8, window_height * 0.8);
+					}
+					else {
+						game::player = entity::entity(renderer, set2, window_width * 0.2, window_height * 0.8);
+						game::enemy = entity::entity(renderer, set1, window_width * 0.8, window_height * 0.8);
 					}
 				}
 			break;
