@@ -10,14 +10,12 @@ void enemyBrain::think(entity* self, entity* other) {
 	int vertSeperation = self->getX() - other->getY();
 	int maxIdle = 10;
 	if (self->getX() < 50) {
-		std::cout << "Stuck Left" << std::endl;
 		self->input(self->Right, true);
 		self->input(self->Left, false);
 		action = EnemyAction::Idle;
 		return;
 	}
 	if (self->getX() >1100) {
-		std::cout << "Stuck Right" << std::endl;
 		self->input(self->Left, true);
 		self->input(self->Right, false);
 		action = EnemyAction::Idle;
