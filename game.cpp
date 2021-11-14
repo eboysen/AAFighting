@@ -61,6 +61,7 @@ void game::update() {
 
 	game::player.update(deltaTime);
 	game::player.collide(game::window_width, game::window_height);
+	game::enemy.think(&(game::player));
 	game::enemy.update(deltaTime);
 	game::enemy.collide(game::window_width, game::window_height);
 

@@ -7,15 +7,46 @@ enemy::enemy() {
 }
 
 enemy::enemy(double x, double y) {
-	enemy::x = x;
+	enemy::action = EnemyActions::Idle;
+	enemy::x = x - 40;
 	enemy::y = y;
 	enemy::w = 80;
 	enemy::h = 160;
-	enemy::moveX = 200;
 	enemy::ys = 0;
 	enemy::willJump = false;
 	enemy::canJump = false;
 	enemy::jumpSpeed = 0.6;
+}
+
+void enemy::think(character* player) {
+	int horzSeperation = 0;// enemy::x - player.x;
+	int vertSeperation = 0;// enemy::y - player.y;
+	switch (enemy::action) {
+	case EnemyActions::Idle:
+		if (abs(horzSeperation) > 350) {
+			// Move towards player
+			enemy::action = EnemyActions::MoveTowards;
+		}
+		else if (abs(horzSeperation) < 50) {
+			// Move away from player
+			// Block?
+			enemy::action = EnemyActions::MoveAway;
+		}
+		else if (vertSeperation > 100) {
+			// Jump
+		}
+		else if (vertSeperation < -100) {
+			// Downwards attack
+		}
+		else {
+			// Attack
+		}
+		break;
+	case EnemyActions::MoveTowards:
+		break;
+	case EnemyActions::MoveAway:
+		break;
+	}
 }
 
 void enemy::update(double deltaTime) {
@@ -35,21 +66,20 @@ void enemy::collide(double width, double height) {
 		enemy::ys = 0;
 		enemy::canJump = true;
 	}
-	double halfWidth = enemy::w * 0.5;
-	if (enemy::x - halfWidth < 0) {
-		enemy::x = halfWidth;
+	if (enemy::x < 0) {
+		enemy::x = 0;
 	}
-	if (enemy::x + halfWidth > width) {
-		enemy::x = width - halfWidth;
+	if (enemy::x > width - enemy::w) {
+		enemy::x = width - enemy::w;
 	}
 }
 
 void enemy::render(SDL_Renderer* renderer) {
 	SDL_Rect rect;
-	rect.x = enemy::x - enemy::w * 0.5;
-	rect.y = enemy::y - enemy::h;
-	rect.w = enemy::w;
-	rect.h = enemy::h;
+	rect.x = static_cast<int>(enemy::x);
+	rect.y = static_cast<int>(enemy::y - enemy::h);
+	rect.w = static_cast<int>(enemy::w);
+	rect.h = static_cast<int>(enemy::h);
 	SDL_SetRenderDrawColor(renderer, 255, 71, 71, 255);
 	SDL_RenderFillRect(renderer, &rect);
 }
