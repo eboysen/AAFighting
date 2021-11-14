@@ -1,7 +1,6 @@
 #include "environment.h"
 #include <SDL_image.h>
 #include <iostream>
-#include "TextureManager.h"
 #include <vector>
 int XTILE = 25;
 int YTILE = 25;

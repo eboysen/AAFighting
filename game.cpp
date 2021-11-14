@@ -109,6 +109,7 @@ void game::render() {
 	back->renderEnvironment(renderer,window_width,window_height);
 	enemy.render(renderer);
 	player.render(renderer);
+	
 	SDL_RenderPresent(renderer);
 }
 
