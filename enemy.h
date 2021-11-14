@@ -4,6 +4,12 @@
 #include "SDL_image.h"
 #include "character.h"
 
+enum EnemyActions {
+	Idle,
+	MoveAway,
+	MoveTowards,
+};
+
 class enemy
 {
 public:
@@ -15,6 +21,7 @@ public:
 	void render(SDL_Renderer* renderer);
 	bool willJump;
 private:
+	EnemyActions action;
 	double x;
 	double y;
 	double w;

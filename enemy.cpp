@@ -7,6 +7,7 @@ enemy::enemy() {
 }
 
 enemy::enemy(double x, double y) {
+	enemy::action = EnemyActions::Idle;
 	enemy::x = x - 40;
 	enemy::y = y;
 	enemy::w = 80;
@@ -18,7 +19,34 @@ enemy::enemy(double x, double y) {
 }
 
 void enemy::think(character* player) {
-	
+	int horzSeperation = 0;// enemy::x - player.x;
+	int vertSeperation = 0;// enemy::y - player.y;
+	switch (enemy::action) {
+	case EnemyActions::Idle:
+		if (abs(horzSeperation) > 350) {
+			// Move towards player
+			enemy::action = EnemyActions::MoveTowards;
+		}
+		else if (abs(horzSeperation) < 50) {
+			// Move away from player
+			// Block?
+			enemy::action = EnemyActions::MoveAway;
+		}
+		else if (vertSeperation > 100) {
+			// Jump
+		}
+		else if (vertSeperation < -100) {
+			// Downwards attack
+		}
+		else {
+			// Attack
+		}
+		break;
+	case EnemyActions::MoveTowards:
+		break;
+	case EnemyActions::MoveAway:
+		break;
+	}
 }
 
 void enemy::update(double deltaTime) {
