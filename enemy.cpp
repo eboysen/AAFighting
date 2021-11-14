@@ -7,11 +7,10 @@ enemy::enemy() {
 }
 
 enemy::enemy(double x, double y) {
-	enemy::x = x;
+	enemy::x = x - 40;
 	enemy::y = y;
 	enemy::w = 80;
 	enemy::h = 160;
-	enemy::moveX = 200;
 	enemy::ys = 0;
 	enemy::willJump = false;
 	enemy::canJump = false;
@@ -35,18 +34,17 @@ void enemy::collide(double width, double height) {
 		enemy::ys = 0;
 		enemy::canJump = true;
 	}
-	double halfWidth = enemy::w * 0.5;
-	if (enemy::x - halfWidth < 0) {
-		enemy::x = halfWidth;
+	if (enemy::x < 0) {
+		enemy::x = 0;
 	}
-	if (enemy::x + halfWidth > width) {
-		enemy::x = width - halfWidth;
+	if (enemy::x > width - enemy::w) {
+		enemy::x = width - enemy::w;
 	}
 }
 
 void enemy::render(SDL_Renderer* renderer) {
 	SDL_Rect rect;
-	rect.x = enemy::x - enemy::w * 0.5;
+	rect.x = enemy::x;
 	rect.y = enemy::y - enemy::h;
 	rect.w = enemy::w;
 	rect.h = enemy::h;

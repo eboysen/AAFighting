@@ -18,8 +18,6 @@ private:
 	double w;
 	double h;
 
-	double moveX;
-	double xs;
 	double ys;
 
 	bool canJump;

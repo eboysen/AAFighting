@@ -21,7 +21,6 @@ private:
 	double h;
 
 	double moveX;
-	double xs;
 	double ys;
 
 	bool canJump;
