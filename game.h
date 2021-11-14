@@ -4,9 +4,10 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
-#include "environment.h"
 
+#include "environment.h"
 #include "character.h"
+#include "enemy.h"
 
 class game
 {
@@ -26,5 +27,6 @@ private:
 	Uint64 last;
 	environment* back;
 	character player;
+	enemy enemy;
 };
 

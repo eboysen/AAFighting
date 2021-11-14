@@ -1,6 +1,6 @@
 #include "character.h"
 
-const float GRAVITY = 1;
+const float GRAVITY = 1.5;
 
 character::character() {
 	character(0, 0);
@@ -18,7 +18,7 @@ character::character(double x, double y) {
 	character::moveRight = 0;
 	character::willJump = false;
 	character::canJump = false;
-	character::jumpSpeed = 0.5;
+	character::jumpSpeed = 0.6;
 }
 
 void character::update(double deltaTime) {
