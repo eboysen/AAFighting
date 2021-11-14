@@ -11,7 +11,7 @@ game::game(Uint16 width, Uint16 height) {
 	game::player = character::character(renderer, width * 0.2, height * 0.8);
 	game::enemy = enemy::enemy(width * 0.8, height * 0.8);
 	game::now = SDL_GetPerformanceCounter();
-	game::environment = &(environment::environment(renderer));
+	game::environment = environment::environment(renderer);
 }
 
 game::~game() {
@@ -101,13 +101,13 @@ void game::update() {
 	}
 	enemy.think(&(player));
 
-	environment->platformCheck(& player);
+	environment.platformCheck(& player);
 }
 
 void game::render() {
 	SDL_SetRenderDrawColor(renderer, 71, 71, 71, 255);
 	SDL_RenderClear(renderer);
-	environment->renderEnvironment(renderer,window_width,window_height);
+	environment.renderEnvironment(renderer,window_width,window_height);
 	enemy.render(renderer);
 	player.render(renderer);
 	
