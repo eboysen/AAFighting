@@ -2,7 +2,7 @@
 #include <iostream>
 #include "TextureManager.h"
 
-const float GRAVITY = 1.4;
+const double GRAVITY = 1.4;
 
 character::character() {}
 character::character(SDL_Renderer* renderer, double x, double y) {
@@ -41,9 +41,6 @@ void character::update(double deltaTime) {
 	lastAttack += deltaTime;
 	if (willAttack && lastAttack >= attackDelay && canAttack) {
 		int upDown = (aimUp ? -1 : 0) + (aimDown ? 1 : 0);
-		if (leftRight == 0 && upDown == 0) {
-			leftRight = facingRight ? 1 : -1;
-		}
 		character::attack(leftRight, upDown);
 		lastAttack = 0;
 		canAttack = false;
@@ -53,12 +50,12 @@ void character::update(double deltaTime) {
 void character::attack(int leftRight, int upDown) {
 	int attackSize = 50;
 	if (leftRight > 0) {
-		attackRect.x = x + w + attackSize * 0.5;
-		attackRect.w = attackSize;
+		attackRect.x = x + w;
+		attackRect.w = attackSize * 2;
 	}
 	else if (leftRight < 0) {
-		attackRect.x = x - attackSize * 1.5;
-		attackRect.w = attackSize;
+		attackRect.x = x - attackSize * 2;
+		attackRect.w = attackSize * 2;
 	}
 	else {
 		if (facingRight) {
@@ -85,7 +82,7 @@ void character::attack(int leftRight, int upDown) {
 		}
 	}
 	else {
-		attackRect.y = y - h / 2 - attackSize * 0.5;
+		attackRect.y = y - h / 2 - attackSize;
 		attackRect.h = attackSize * 2;
 	}
 	attacking = true;
@@ -94,8 +91,8 @@ void character::attack(int leftRight, int upDown) {
 vector2 character::attack(SDL_Rect enemyRect) {
 	bool hit = SDL_HasIntersection(&attackRect, &enemyRect);
 	if (hit) {
-		double xDir = x + w * 0.5 - enemyRect.x + enemyRect.w * 0.5;
-		double yDir = attackRect.y + attackRect.h * 0.5 - enemyRect.y + enemyRect.h * 0.5;
+		double xDir = x + w * 0.5 - (enemyRect.x + enemyRect.w * 0.5);
+		double yDir = attackRect.y + attackRect.h * 0.5 - (enemyRect.y + enemyRect.h * 0.5);
 		return vector2(-xDir, -yDir).normalize(attackForce);
 	}
 	return vector2(0, 0);

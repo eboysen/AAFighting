@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <iostream>
+#include <vector>
 
 #include "SDL.h"
 #include "SDL_image.h"
@@ -8,6 +9,7 @@
 #include "environment.h"
 #include "character.h"
 #include "enemy.h"
+#include "rain.h"
 
 class game
 {
@@ -29,5 +31,6 @@ private:
 	environment environment;
 	character player;
 	enemy enemy;
+	std::vector<rain> weather;
 };
 
