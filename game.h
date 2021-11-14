@@ -18,7 +18,6 @@ public:
 	void render();
 
 private:
-	void handleInput(SDL_Event& event, bool keyDown);
 	SDL_Window * window;
 	SDL_Renderer * renderer;
 	Uint16 window_width;

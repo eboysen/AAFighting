@@ -30,7 +30,7 @@ int lvl1[25][25] =
 	{1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 };
-environment::environment(int lvl1[20][25]) {
+environment::environment() {
 }
 environment::~environment() {
 

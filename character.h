@@ -12,6 +12,7 @@ public:
 	bool moveRight;
 	bool willJump;
 	void update(double deltaTime);
+	void collide(double width, double height);
 	void render(SDL_Renderer * renderer);
 private:
 	double x;
@@ -19,6 +20,7 @@ private:
 	double w;
 	double h;
 
+	double moveX;
 	double xs;
 	double ys;
 

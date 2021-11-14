@@ -3,7 +3,7 @@
 class environment
 {
 public:
-	environment(int lvl1[20][25]);
+	environment();
 	~environment();
 	void renderEnvironment(SDL_Renderer * render, int width, int height);
 
