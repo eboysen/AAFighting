@@ -1,12 +1,9 @@
 #include "enemy.h"
 #include <iostream>
 
-const float GRAVITY = 1.5;
+const float GRAVITY = 1.4;
 
-enemy::enemy() {
-	enemy(0, 0);
-}
-
+enemy::enemy() {}
 enemy::enemy(double x, double y) {
 	enemy::action = EnemyActions::Idle;
 	enemy::x = x - 40;
@@ -78,9 +75,7 @@ void enemy::collide(double width, double height) {
 	canJump = false;
 
 	if (y > height) {
-		y = height;
-		ys = 0;
-		canJump = true;
+		enemy::setPlatform(height);
 	}
 	if (x < 0) {
 		x = 0;
@@ -90,8 +85,13 @@ void enemy::collide(double width, double height) {
 	}
 }
 
+void enemy::setPlatform(double yPos) {
+	y = yPos;
+	ys = 0;
+	canJump = true;
+}
+
 void enemy::applyKickback(double x, double y) {
-	std::cout << x << " " << y << std::endl;
 	xs += x;
 	ys += y / 2;
 }

@@ -19,6 +19,7 @@ public:
 	void update(double deltaTime);
 	void fixedUpdate();
 	void collide(double width, double height);
+	void setPlatform(double yPos);
 	void applyKickback(double x, double y);
 	void render(SDL_Renderer* renderer);
 	bool willJump;

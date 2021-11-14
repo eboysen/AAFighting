@@ -4,9 +4,7 @@
 
 const float GRAVITY = 1.4;
 
-character::character() {
-}
-
+character::character() {}
 character::character(SDL_Renderer* renderer, double x, double y) {
 	character::texture = TextureManager::loadTexture("./assets/player.png", renderer);
 	character::x = x - 40;
@@ -85,7 +83,6 @@ vector2 character::attack(SDL_Rect enemyRect) {
 	bool hit = SDL_HasIntersection(&attackRect, &enemyRect);
 	if (hit) {
 		double xDir = x + w * 0.5 - enemyRect.x + enemyRect.w * 0.5;
-		std::cout << xDir << std::endl;
 		double yDir = attackRect.y + attackRect.h * 0.5 - enemyRect.y + enemyRect.h * 0.5;
 		return vector2(-xDir, -yDir).normalize(attackForce);
 	}
@@ -132,16 +129,16 @@ void character::fixedUpdate() {
 }
 
 void character::collide(double width, double height) {
-	character::canJump = false;
+	canJump = false;
 
-	if (character::y > height) {
-		character::setPlatform(height);
+	if (y > height) {
+		setPlatform(height);
 	}
-	if (character::x < 0) {
-		character::x = 0;
+	if (x < 0) {
+		x = 0;
 	}
-	if (character::x > width - character::w) {
-		character::x = width - character::w;
+	if (x > width - w) {
+		x = width - w;
 	}
 }
 

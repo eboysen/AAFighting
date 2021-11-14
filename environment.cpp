@@ -7,8 +7,12 @@ int YTILE = 20;
 int WIDTH = 1200 / XTILE;
 int HEIGHT = 600 / YTILE;
 
-int lvl1[20][40] =
-{
+struct position {
+	int y;
+	int x;
+};
+
+int lvl1[20][40] = {
 	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -30,30 +34,26 @@ int lvl1[20][40] =
 	{0, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 0},
 	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 };
-
-struct position {
-	int y;
-	int x;
-};
 std::vector<position> platformTiles;
 
-environment::environment() {
-}
-environment::~environment() {
+SDL_Texture* leftCloud;
+SDL_Texture* middleCloud;
+SDL_Texture* rightCloud;
 
+environment::environment() {}
+environment::environment(SDL_Renderer* render) {
+	leftCloud = TextureManager::loadTexture("./assets/leftCloud.png", render);
+	middleCloud = TextureManager::loadTexture("./assets/middleCloud.png", render);
+	rightCloud = TextureManager::loadTexture("./assets/rightCloud.png", render);
 }
+environment::~environment() {}
 
 void environment::renderEnvironment(SDL_Renderer* render, int width, int height) {
 	HEIGHT = height;
 	WIDTH = width;
-	SDL_Texture* leftCloud = TextureManager::loadTexture("./assets/leftCloud.png", render);
-	SDL_Texture* middleCloud = TextureManager::loadTexture("./assets/middleCloud.png", render);
-	SDL_Texture* rightCloud = TextureManager::loadTexture("./assets/rightCloud.png", render);
-
 	platformTiles.clear();
-
-
-	SDL_Rect rect,srect;
+	SDL_Rect rect;
+	SDL_Rect srect;
 	int size = width / XTILE;
 	srect.h = 32;
 	srect.w = 32;
@@ -65,34 +65,25 @@ void environment::renderEnvironment(SDL_Renderer* render, int width, int height)
 		for (int y = 0; y < YTILE; y++) {
 			rect.x = x * size;
 			rect.y = y * size;
-			if (lvl1[y][x]%2 == 1) {
-				SDL_SetRenderDrawColor(render, 71, 61, 61, 255);
+			SDL_SetRenderDrawColor(render, 71, 61, 61, 255);
+			SDL_RenderDrawRect(render, &rect);
+			if (lvl1[y][x] % 2 == 1) {
 				position Platform;
 				Platform.y = y;
 				Platform.x = x;
 				platformTiles.push_back(Platform);
 				if (lvl1[y][x] == 1) {
-					//std::cout << x << y << std::endl;
-					SDL_RenderCopy(render, leftCloud, &srect, &rect);				
+					SDL_RenderCopy(render, leftCloud, NULL, &rect);
 				}
 				else if (lvl1[y][x] == 3) {
-					//std::cout << x << y << std::endl;
-					SDL_RenderCopy(render, middleCloud, &srect, &rect);
+					SDL_RenderCopy(render, middleCloud, NULL, &rect);
 				}
 				else if (lvl1[y][x] == 5) {
-					//std::cout << x << y << std::endl;
-					SDL_RenderCopy(render, rightCloud, &srect, &rect);
+					SDL_RenderCopy(render, rightCloud, NULL, &rect);
 				}
 			}
-			else {
-				SDL_SetRenderDrawColor(render, 71, 61, 61, 255);
-				SDL_RenderDrawRect(render, &rect);
-			}
-			
 		}
 	}
-
-
 }
 
 void environment::platformCheck(character* Character) {

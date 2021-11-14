@@ -26,7 +26,7 @@ private:
 	Uint64 now;
 	Uint64 last = 0;
 	double currentTime = 0;
-	environment* back;
+	environment* environment;
 	character player;
 	enemy enemy;
 };
