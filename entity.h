@@ -39,6 +39,8 @@ public:
 	void setPlatform(double y);
 	void applyKickback(double x, double y);
 	void damage(int amount);
+	void lock();
+	void kill();
 
 	// Properties
 	SDL_Rect getHitbox() { return renderer.getEntityRect(xPos, yPos); }
@@ -55,6 +57,8 @@ private:
 	entityRenderer renderer;
 	bool facingRight = true;
 	int health;
+	bool alive = true;
+	bool locked = false;
 
 	// X and Y Position (Bottom-Left Corner)
 	double xPos;

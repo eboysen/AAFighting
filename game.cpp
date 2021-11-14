@@ -87,9 +87,9 @@ game::game(Uint16 width, Uint16 height) {
 	healthBarRect.y = 40;
 	healthBarRect.w = w;
 	healthBarRect.h = 40;
-	game::playerHealth = healthBar(renderer, healthBarRect, player.getHealth(), true);
+	game::playerHealth = healthBar(renderer, healthBarRect, 100, true);
 	healthBarRect.x = width - w - 40;
-	game::enemyHealth = healthBar(renderer, healthBarRect, enemy.getHealth(), false);
+	game::enemyHealth = healthBar(renderer, healthBarRect, 100, false);
 }
 
 // -------------------- MENU --------------------
@@ -135,7 +135,6 @@ void game::menuUpdate() {
 			else if (SDL_PointInRect(&mousePos, &arrowRect) && !startMenu) {
 				characterSelect = false;
 				menuActive = false;
-				std::cout << lvlSelect << std::endl;
 				if (lvlSelect == "alpha") {
 					environment.setLevel(1);
 				}
@@ -262,9 +261,17 @@ void game::update() {
 	player.update(deltaTime);
 	if (player.isAttacking()) {
 		vector2 kickback = player.attack(enemy.getHitbox());
-		enemy.applyKickback(kickback.x, kickback.y);
+		if (kickback.x != 0 && kickback.y != 0) {
+			enemy.applyKickback(kickback.x, kickback.y);
+		}
 	}
 	enemy.update(deltaTime);
+	if (enemy.isAttacking()) {
+		vector2 kickback = enemy.attack(player.getHitbox());
+		if (kickback.x != 0 && kickback.y != 0) {
+			player.applyKickback(kickback.x, kickback.y);
+		}
+	}
 
 	for (int i = 0; i < weather.size(); i++) {
 		weather.at(i).update(deltaTime);
@@ -275,6 +282,21 @@ void game::update() {
 	enemyHealth.setHealth(enemy.getHealth());
 	playerHealth.update(deltaTime);
 	enemyHealth.update(deltaTime);
+
+	if (player.getHealth() <= 0) {
+		// LOSE
+		player.kill();
+		enemy.lock();
+		gameOver = true;
+		victory = false;
+	}
+	else if (enemy.getHealth() <= 0) {
+		// WIN
+		player.lock();
+		enemy.kill();
+		gameOver = true;
+		victory = false;
+	}
 }
 
 void game::render() {
@@ -289,6 +311,21 @@ void game::render() {
 	
 	playerHealth.render(renderer);
 	enemyHealth.render(renderer);
+	if (gameOver) {
+		SDL_Rect endRect = SDL_Rect();
+		endRect.x = window_width / 4;
+		endRect.y = 3 * window_width / 4;
+		endRect.w = window_width / 2;
+		endRect.h = window_width / 2;
+		if (victory) {
+			auto win = TextureManager::loadTexture("./assets/victory.png", renderer);
+			SDL_RenderCopy(renderer, win, NULL, &endRect);
+		}
+		else {
+			auto lose = TextureManager::loadTexture("./assets/lose.png", renderer);
+			SDL_RenderCopy(renderer, lose, NULL, &endRect);
+		}
+	}
 	SDL_RenderPresent(renderer);
 }
 

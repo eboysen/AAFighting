@@ -27,6 +27,7 @@ entity::entity(SDL_Renderer* renderer, entitySet set, double x, double y) {
 
 // Generic
 void entity::input(EntityInput input, bool active) {
+	if (locked) return;
 	switch (input) {
 	case EntityInput::Up:
 		aimUp = active;
@@ -114,6 +115,7 @@ void entity::collide(double width, double height) {
 	}
 }
 void entity::render(SDL_Renderer* renderer) {
+	if (!alive) return;
 	entity::renderer.render(renderer, facingRight, xPos, yPos);
 
 	if (lastAttack < attackDelay - 0.01) {
@@ -152,26 +154,34 @@ void entity::handleAttack(int leftRight, int upDown) {
 	}
 	else {
 		if (facingRight) {
-			attackRect.x = xPos + renderer.getWidth() - attackSize;
+			attackRect.x = xPos + renderer.getWidth() - attackSize * 1.5;
 			attackRect.w = attackSize * 2;
 		}
 		else {
-			attackRect.x = xPos - attackSize;
+			attackRect.x = xPos - attackSize * 0.5;
 			attackRect.w = attackSize * 2;
 		}
 	}
 	if (upDown < 0) {
 		attackRect.y = yPos - renderer.getHeight() - attackSize * 0.5;
 		attackRect.h = attackSize;
+		if (facingRight) {
+			attackRect.x += attackSize * 0.75;
+		}
+		else {
+			attackRect.x -= attackSize * 0.75;
+		}
 	}
 	else if (upDown > 0) {
 		attackRect.y = yPos - attackSize;
 		attackRect.h = attackSize;
 		if (facingRight) {
-			attackRect.x += attackSize * 1.25;
+			attackRect.x += attackSize * 0.75;
+			attackRect.w *= 1.25;
 		}
 		else {
-			attackRect.x -= attackSize * 1.25;
+			attackRect.x -= attackSize * 0.75;
+			attackRect.w *= 1.25;
 		}
 	}
 	else {
@@ -198,8 +208,22 @@ void entity::setPlatform(double y) {
 void entity::applyKickback(double x, double y) {
 	xVel += x;
 	yVel += y;
-	damage(1);
+	damage(1 + rand()%3);
 }
 void entity::damage(int amount) {
 	health -= amount;
+}
+void entity::lock() {
+	input(Left, false);
+	input(Right, false);
+	input(Up, false);
+	input(Down, false);
+	input(Dash, false);
+	input(Jump, false);
+	input(Attack, false);
+	locked = true;
+}
+void entity::kill() {
+	lock();
+	alive = false;
 }

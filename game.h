@@ -61,5 +61,7 @@ private:
 	SDL_Texture* arrowTex;
 	healthBar playerHealth;
 	healthBar enemyHealth;
+	bool gameOver = false;
+	bool victory = false;
 };
 

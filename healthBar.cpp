@@ -11,8 +11,8 @@ healthBar::healthBar(SDL_Renderer * renderer, SDL_Rect rect, int maxHealth, bool
 	healthBar::maxHealth = maxHealth;
 	healthBar::damageEffectValue = maxHealth;
 	healthBar::currentHealth = maxHealth;
-	healthBar::fadeDamageEffect = 0.5;
-	healthBar::fadeDamageSpeed = 20;
+	healthBar::fadeDamageEffect = 0.33;
+	healthBar::fadeDamageSpeed = 25;
 }
 void healthBar::setHealth(int health) {
 	if (health == currentHealth) return;
@@ -20,7 +20,6 @@ void healthBar::setHealth(int health) {
 	lastHealthChangeTime = 0;
 }
 void healthBar::update(double deltaTime) {
-	if (leftAlign) return;
 	lastHealthChangeTime += (double)deltaTime;
 	if (lastHealthChangeTime > fadeDamageEffect && damageEffectValue > currentHealth) {
 		damageEffectValue -= deltaTime * fadeDamageSpeed;
