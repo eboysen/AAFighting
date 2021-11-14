@@ -77,15 +77,15 @@ void environment::renderEnvironment(SDL_Renderer* render, int width, int height)
 				Platform.x = x;
 				platformTiles.push_back(Platform);
 				if (lvl1[y][x] == 1) {
-					std::cout << x << y << std::endl;
+					//std::cout << x << y << std::endl;
 					SDL_RenderCopy(render, leftCloud, &srect, &rect);				
 				}
 				else if (lvl1[y][x] == 3) {
-					std::cout << x << y << std::endl;
+					//std::cout << x << y << std::endl;
 					SDL_RenderCopy(render, middleCloud, &srect, &rect);
 				}
 				else if (lvl1[y][x] == 5) {
-					std::cout << x << y << std::endl;
+					//std::cout << x << y << std::endl;
 					SDL_RenderCopy(render, rightCloud, &srect, &rect);
 				}
 			}

@@ -8,7 +8,7 @@ game::game(Uint16 width, Uint16 height) {
 	game::window_height = height;
 	game::window = SDL_CreateWindow("AAFighter", 100, 100, width, height, SDL_WINDOW_OPENGL);
 	game::renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	game::player = character::character(width * 0.2, height * 0.8);
+	game::player = character::character(renderer, width * 0.2, height * 0.8);
 	game::enemy = enemy::enemy(width * 0.8, height * 0.8);
 	game::now = SDL_GetPerformanceCounter();
 }
