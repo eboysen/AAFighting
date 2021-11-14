@@ -5,7 +5,12 @@ enemyBrain::enemyBrain() {
 	action = Idle;
 }
 
-void enemyBrain::think(entity* self, entity* other) {
+void enemyBrain::think(entity* self, entity* other, double deltaTime) {
+	attackTime -= deltaTime;
+	if (attackTime <= 0) {
+		attackTime = 0.2 + (rand() % 8) / 4;
+		self->input(self->Attack, true);
+	}
 	int horzSeperation = self->getX() - other->getX();
 	int vertSeperation = self->getX() - other->getY();
 	int maxIdle = 10;
@@ -72,7 +77,7 @@ void enemyBrain::think(entity* self, entity* other) {
 		else {
 			self->input(self->Right, true);
 		}
-		if (abs(horzSeperation < 100)) {
+		if (abs(horzSeperation < 40)) {
 			action = EnemyAction::Idle;
 		}
 		break;

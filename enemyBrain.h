@@ -14,8 +14,9 @@ private:
 		Attack
 	};
 	EnemyAction action;
+	double attackTime;
 public:
 	enemyBrain();
-	void think(entity* self, entity* other);
+	void think(entity* self, entity* other, double deltaTime);
 };
 
