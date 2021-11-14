@@ -26,6 +26,7 @@ public:
 	void render();
 	void menuUpdate();
 	void menuRender();
+	void startRain();
 
 private:
 	SDL_Window * window;

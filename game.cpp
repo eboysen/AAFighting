@@ -75,12 +75,6 @@ game::game(Uint16 width, Uint16 height) {
 	omegaTex = TextureManager::loadTexture("./assets/omega.png", renderer);
 	arrowTex = TextureManager::loadTexture("./assets/arrow.png", renderer);
 	game::weather;
-	for (int i = 0; i < 250; i++) {
-		int x = rand() % width;
-		int y = rand() % height;
-		rain newRain = rain(x, y, height);
-		weather.push_back(newRain);
-	}
 	SDL_Rect healthBarRect = SDL_Rect();
 	double w = width / 4;
 	healthBarRect.x = 40;
@@ -152,6 +146,7 @@ void game::menuUpdate() {
 					game::player = entity::entity(renderer, set2, window_width * 0.2, window_height * 0.8);
 					game::enemy = entity::entity(renderer, set1, window_width * 0.8, window_height * 0.8);
 				}
+				game::startRain();
 			}
 			break;
 
@@ -182,7 +177,6 @@ void game::menuRender() {
 // -------------------- GAME --------------------
 
 void game::update() {
-	enemyBrain.think(&enemy, &player);
 
 	SDL_Event event;
 	if (SDL_PollEvent(&event)) {
@@ -246,6 +240,7 @@ void game::update() {
 	last = now;
 	now = SDL_GetPerformanceCounter();
 	double deltaTime = ((now - last) / (double)SDL_GetPerformanceFrequency());
+	enemyBrain.think(&enemy, &player, deltaTime);
 
 	currentTime += deltaTime;
 	while (currentTime > FIXED_UPDATE_TIME) {
@@ -333,4 +328,13 @@ game::~game() {
 	SDL_DestroyRenderer(game::renderer);
 	SDL_DestroyWindow(game::window);
 	SDL_Quit();
+}
+
+void game::startRain() {
+	for (int i = 0; i < 250; i++) {
+		int x = rand() % 1200;
+		int y = rand() % 2000;
+		rain newRain = rain(x, y, 600);
+		weather.push_back(newRain);
+	}
 }
