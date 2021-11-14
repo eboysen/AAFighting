@@ -60,17 +60,6 @@ void game::update() {
 	game::player.update(deltaTime);
 }
 
-void game::handleInput(SDL_Event &event, bool keyDown) {
-	switch (event.key.keysym.sym) {
-	case SDLK_LEFT:
-		game::player.moveLeft = keyDown;
-		break;
-	case SDLK_RIGHT:
-		game::player.moveRight = keyDown;
-		break;
-	}
-}
-
 void game::render() {
 	SDL_SetRenderDrawColor(game::renderer, 71, 71, 71, 255);
 	SDL_RenderClear(game::renderer);
